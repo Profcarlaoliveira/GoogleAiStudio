@@ -160,8 +160,53 @@ export default function AIPlanner() {
       let textResult = "";
       let fetchSuccessful = false;
 
-      // 1. Try server-side first (if no custom client-side key overrides it)
-      if (!customApiKey.trim()) {
+      // 1. If we have a custom API key, try using it first
+      const apiKey = customApiKey.trim();
+      if (apiKey) {
+        try {
+          const endpointsToTry = [
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
+          ];
+
+          let lastError = null;
+          for (const url of endpointsToTry) {
+            try {
+              const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  contents: [{ parts: [{ text: prompt }] }],
+                  systemInstruction: { parts: [{ text: systemInstruction }] }
+                })
+              });
+
+              if (response.ok) {
+                const data = await response.json();
+                if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+                  textResult = data.candidates[0].content.parts[0].text;
+                  fetchSuccessful = true;
+                  break; // Successful direct client call!
+                }
+              } else {
+                const errData = await response.json().catch(() => ({}));
+                lastError = errData.error?.message || response.statusText;
+              }
+            } catch (err: any) {
+              lastError = err.message || String(err);
+            }
+          }
+
+          if (!fetchSuccessful) {
+            console.warn(`Direct client call with custom API key failed (Error: ${lastError}). Attempting server proxy fallback...`);
+          }
+        } catch (err) {
+          console.warn("Direct client call failed, using server fallback", err);
+        }
+      }
+
+      // 2. Try server-side proxy fallback if client-side direct calling failed OR was not attempted
+      if (!fetchSuccessful) {
         try {
           const response = await fetch("/api/gemini/generate", {
             method: "POST",
@@ -176,41 +221,14 @@ export default function AIPlanner() {
               textResult = data.text;
               fetchSuccessful = true;
             }
+          } else {
+            // If server returned error, extract details if possible for debug
+            const errData = await response.json().catch(() => ({}));
+            const serverErrMsg = errData.error || errData.details || response.statusText;
+            console.warn(`Server fallback failed: ${serverErrMsg}`);
           }
         } catch (serverErr) {
-          console.warn("Express server not available or returned an error, falling back.", serverErr);
-        }
-      }
-
-      // 2. Client-side direct fallback if server failed / not available, OR if client key exists
-      if (!fetchSuccessful) {
-        const apiKey = customApiKey.trim();
-        if (apiKey) {
-          // Direct client call to official Google Gemini API endpoint (secured and direct!)
-          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-          
-          const response = await fetch(endpoint, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
-              systemInstruction: { parts: [{ text: systemInstruction }] }
-            })
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
-              textResult = data.candidates[0].content.parts[0].text;
-              fetchSuccessful = true;
-            } else {
-              throw new Error("Resposta do Gemini veio vazia da API direta.");
-            }
-          } else {
-            const errData = await response.json().catch(() => ({}));
-            const errMsg = errData.error?.message || response.statusText;
-            throw new Error(`Erro na API do Gemini: ${errMsg}`);
-          }
+          console.warn("Express server not available or returned an error:", serverErr);
         }
       }
 
