@@ -1,0 +1,6 @@
+{
+  "name": "Portal Google AI Studio para Professores",
+  "description": "Uma plataforma interativa para professores explorarem o potencial do Google AI Studio no planeamento de aulas, criação de materiais e personalização do ensino.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
