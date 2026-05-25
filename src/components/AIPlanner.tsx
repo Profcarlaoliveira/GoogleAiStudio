@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { BookOpen, Sparkles, Wand2, Copy, FileText, Check, LayoutGrid, Award, Lightbulb, AlertTriangle } from "lucide-react";
+import { BookOpen, Sparkles, Wand2, Copy, FileText, Check, LayoutGrid, Award, Lightbulb, AlertTriangle, Key, Save } from "lucide-react";
 
 export default function AIPlanner() {
   const [activeMode, setActiveMode] = useState<'planner' | 'rubric' | 'activity'>('planner');
@@ -8,6 +8,23 @@ export default function AIPlanner() {
   const [copied, setCopied] = useState(false);
   const [statusText, setStatusText] = useState("");
   const [result, setResult] = useState<string>("");
+
+  // Standalone mode / Static deploy API Key configuration
+  const [customApiKey, setCustomApiKey] = useState(() => localStorage.getItem("CUSTOM_GEMINI_API_KEY") || "");
+  const [showApiKeySetting, setShowApiKeySetting] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  const saveCustomApiKey = (key: string) => {
+    localStorage.setItem("CUSTOM_GEMINI_API_KEY", key);
+    setCustomApiKey(key);
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 2000);
+  };
+
+  const clearCustomApiKey = () => {
+    localStorage.removeItem("CUSTOM_GEMINI_API_KEY");
+    setCustomApiKey("");
+  };
 
   // Input states
   const [subject, setSubject] = useState("Ciências Naturais");
@@ -140,18 +157,79 @@ export default function AIPlanner() {
         5. **Desafio de Resolução Rápida (com respostas / guias de solução para o professor)**`;
       }
 
-      const response = await fetch("/api/gemini/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, systemInstruction })
-      });
+      let textResult = "";
+      let fetchSuccessful = false;
 
-      const data = await response.json();
-      
-      if (response.ok) {
-        setResult(data.text || "Sem resposta obtida do modelo.");
+      // 1. Try server-side first (if no custom client-side key overrides it)
+      if (!customApiKey.trim()) {
+        try {
+          const response = await fetch("/api/gemini/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt, systemInstruction })
+          });
+
+          const contentType = response.headers.get("content-type");
+          if (response.ok && contentType && contentType.includes("application/json")) {
+            const data = await response.json();
+            if (data.text) {
+              textResult = data.text;
+              fetchSuccessful = true;
+            }
+          }
+        } catch (serverErr) {
+          console.warn("Express server not available or returned an error, falling back.", serverErr);
+        }
+      }
+
+      // 2. Client-side direct fallback if server failed / not available, OR if client key exists
+      if (!fetchSuccessful) {
+        const apiKey = customApiKey.trim();
+        if (apiKey) {
+          // Direct client call to official Google Gemini API endpoint (secured and direct!)
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+          
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              systemInstruction: { parts: [{ text: systemInstruction }] }
+            })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+              textResult = data.candidates[0].content.parts[0].text;
+              fetchSuccessful = true;
+            } else {
+              throw new Error("Resposta do Gemini veio vazia da API direta.");
+            }
+          } else {
+            const errData = await response.json().catch(() => ({}));
+            const errMsg = errData.error?.message || response.statusText;
+            throw new Error(`Erro na API do Gemini: ${errMsg}`);
+          }
+        }
+      }
+
+      if (fetchSuccessful) {
+        setResult(textResult || "Sem resposta obtida do modelo.");
       } else {
-        setResult(`Erro ao comunicar com a IA: ${data.details || data.error}`);
+        // Show rich localized markdown help guide explaining exactly how to fix the static deploy error
+        setResult(`### 🛑 Erro de Ligação: Chave API necessária para o site publicado!
+
+Detetámos que a sua aplicação está a carregar de forma **estática** (por exemplo, no GitHub Pages ou Netlify simples), o que significa que não tem um servidor ativo (\`server.ts\` / Node.js) em segundo plano para fazer chamadas seguras automáticas.
+
+**Para colocar a sua aplicação a funcionar 100% grátis e sem erros do seu browser, faça isto:**
+
+1. Obtenha uma **Chave API Grátis** em segundos acedendo ao [Google AI Studio](https://aistudio.google.com/).
+2. Clique no novo botão **"🔑 Configurar Chave API Própria"** que adicionámos ao lado, na barra de configuração.
+3. Cole lá a sua chave e guarde. Ela fica gravada apenas no seu navegador de forma pessoal e sem limites!
+
+---
+*Nota para servidores reais:* Caso aloje a aplicação completa num serviço com suporte de backend real (como Render, Fly.io ou Google Cloud Run), a aplicação comunicará automaticamente com a chave secreta guardada nas variáveis de ambiente, sem os utilizadores precisarem de fazer nada!`);
       }
     } catch (err: any) {
       console.error(err);
@@ -285,7 +363,7 @@ export default function AIPlanner() {
             {/* Quick Demo Pre-fills */}
             <div className="mb-6">
               <span className="text-[11px] font-semibold text-slate-500 block mb-2">Preencher Configurações de Exemplo:</span>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1.5 mb-4">
                 <button
                   onClick={() => selectSample(samples[0])}
                   className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-2xs px-2.5 py-1.5 rounded-md transition-all font-medium"
@@ -310,6 +388,69 @@ export default function AIPlanner() {
                 >
                   📐 Pitágoras (Scape Room)
                 </button>
+              </div>
+
+              {/* API Key Standalone Configuration drawer */}
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                <div className="flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setShowApiKeySetting(!showApiKeySetting)}
+                    className="flex items-center gap-2 text-[11px] font-bold text-slate-700 hover:text-blue-600 transition-colors uppercase tracking-wider text-left"
+                  >
+                    <Key className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                    <span>Configurar Chave API Própria</span>
+                  </button>
+                  {customApiKey ? (
+                    <span className="text-[9px] bg-green-150 text-green-800 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1 shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Ativa
+                    </span>
+                  ) : (
+                    <span className="text-[9px] bg-slate-200 text-slate-600 font-semibold px-1.5 py-0.5 rounded-full shrink-0">
+                      Sem Chave
+                    </span>
+                  )}
+                </div>
+                <p className="text-[10px] text-slate-500 mt-1 leading-relaxed">
+                  Apenas necessário para correr a IA de forma direta se o seu site estiver no GitHub Pages ou Netlify simples.
+                </p>
+
+                <AnimatePresence>
+                  {showApiKeySetting && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden mt-3 pt-3 border-t border-slate-200/60 text-left"
+                    >
+                      <label className="text-[10px] font-bold text-slate-700 block mb-1">Insina a sua Chave API do Google AI Studio:</label>
+                      <div className="flex gap-1.5">
+                        <input
+                          type="password"
+                          placeholder="Cole a sua chave aqui (AIzaSy...)"
+                          value={customApiKey}
+                          onChange={(e) => saveCustomApiKey(e.target.value)}
+                          className="flex-grow text-xs px-2.5 py-2 rounded border border-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                        />
+                        {customApiKey && (
+                          <button
+                            type="button"
+                            onClick={clearCustomApiKey}
+                            className="px-2 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-250 text-rose-700 rounded text-[10px] font-bold transition-all"
+                          >
+                            Limpar
+                          </button>
+                        )}
+                      </div>
+                      {isSaved && (
+                        <p className="text-[10px] text-green-600 font-semibold mt-1">Chave guardada com sucesso no seu navegador!</p>
+                      )}
+                      <span className="text-[10px] text-slate-400 block mt-2">
+                        Obtenha a sua chave grátis em <a href="https://aistudio.google.com/" target="_blank" rel="noreferrer" className="text-blue-500 underline font-semibold">aistudio.google.com</a>. Fica guardada localmente no seu dispositivo.
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
 

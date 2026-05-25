@@ -638,6 +638,47 @@ export default function StudioExplorer() {
                   </div>
                 </div>
               </div>
+
+              {/* GitHub Flow Quick Guide */}
+              <div className="bg-indigo-50/40 border border-indigo-100 rounded-2xl p-6 font-sans">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="p-2 bg-indigo-100 rounded-lg text-indigo-700">
+                    <Globe className="w-5 h-5" />
+                  </span>
+                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                    Já publicou no GitHub? Como Ativar o Link de Visualização Gratuito
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Se já submeteu ou sincronizou os seus ficheiros com um repositório no **GitHub**, tem à disposição os dois métodos padrão mais profissionais para gerar e obter a hiperligação de visualização pública:
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-white border border-slate-200 rounded-xl space-y-2 text-xs">
+                    <span className="font-bold text-indigo-750 block">Método A: Ligar ao Netlify/Vercel (Recomendado/Automático)</span>
+                    <p className="text-slate-600 leading-relaxed">
+                      Este é o método mais simples e robusto. Em vez de fazer o upload manual de ficheiros, deixa que a nuvem compile e atualize o código de forma autónoma:
+                    </p>
+                    <ol className="list-decimal pl-4 text-slate-500 space-y-1 text-2xs md:text-xs">
+                      <li>Crie conta no <strong>Netlify</strong> ou <strong>Vercel</strong> e selecione a opção para se registar/conectar via <strong>GitHub</strong>.</li>
+                      <li>Clique em <strong>Add New Site</strong> (ou <i>New Project</i>) &gt; selecione o seu repositório sincronizado.</li>
+                      <li>As plataformas detetam as configurações Vite do projeto de imediato. Clique em <strong>Deploy</strong> (Publicar).</li>
+                      <li><strong>Vantagem única:</strong> Sempre que fizer um novo &quot;Push&quot; ou alteração de código no GitHub, a sua aplicação reconstrói-se no seu link público de forma 100% automática!</li>
+                    </ol>
+                  </div>
+                  <div className="p-4 bg-white border border-slate-200 rounded-xl space-y-2 text-xs">
+                    <span className="font-bold text-slate-800 block">Método B: Ativar o GitHub Pages Nativo</span>
+                    <p className="text-slate-600 leading-relaxed">
+                      Se deseja que a página seja servida diretamente a partir do próprio GitHub sem usar terceiros, configure a biblioteca do Pages:
+                    </p>
+                    <ol className="list-decimal pl-4 text-slate-500 space-y-1 text-2xs md:text-xs">
+                      <li>No terminal da pasta local do seu projeto, instale executando: <code className="bg-slate-105 p-0.5 rounded font-mono text-[10px] text-slate-800">npm install gh-pages --save-dev</code>.</li>
+                      <li>Adicione a propriedade <code className="bg-slate-105 p-0.5 rounded font-mono text-[10px] text-slate-800">&quot;homepage&quot;: &quot;https://utilizador.github.io/repositorio&quot;</code> no ficheiro <code className="font-mono text-[10px]">package.json</code>.</li>
+                      <li>Adicione a linha em scripts do package.json: <code className="bg-slate-105 p-0.5 rounded font-mono text-[10px] text-slate-800">&quot;deploy&quot;: &quot;gh-pages -d dist&quot;</code>.</li>
+                      <li>Execute <code className="bg-slate-105 p-0.5 rounded font-mono text-[10px] text-slate-850">npm run deploy</code> para compilar e enviar o site para o ramo especial gh-pages que fornece o link de visualização público.</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           )}
 

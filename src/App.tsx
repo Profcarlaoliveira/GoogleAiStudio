@@ -1,14 +1,23 @@
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import BuildVsCode from "./components/BuildVsCode";
 import StudioExplorer from "./components/StudioExplorer";
 import AIPlanner from "./components/AIPlanner";
 import Integrations from "./components/Integrations";
 import PracticalTutorial from "./components/PracticalTutorial";
-import { BookOpen, Sparkles, LayoutGrid, Award, ShieldAlert, GraduationCap, Cpu } from "lucide-react";
+import { BookOpen, Sparkles, LayoutGrid, Award, ShieldAlert, GraduationCap, Cpu, Home, Compass, Lightbulb } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
+  const [activeTab, setActiveTab ] = useState<'overview' | 'explorer' | 'playground' | 'tutorials'>('overview');
+
+  // Smoothly scroll back to the top on page/tab changes for absolute comfort
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [activeTab]);
+
   return (
-    <div id="main-container" className="min-h-screen bg-slate-50 text-slate-800 antialiased selection:bg-indigo-500 selection:text-white pb-24">
+    <div id="main-container" className="min-h-screen bg-slate-50 text-slate-800 antialiased selection:bg-indigo-500 selection:text-white pb-24 font-sans">
       
       {/* Educational Promo Top Banner (subtle and high-contrast) */}
       <div id="top-school-banner" className="bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white py-3 px-4 text-center text-xs font-semibold relative z-20 flex items-center justify-center gap-2">
@@ -16,56 +25,151 @@ export default function App() {
         <span>Como é que a Inteligência Artificial pode apoiar o Ensino em Portugal? Explore abaixo!</span>
       </div>
 
-      {/* Header Navigation */}
+      {/* Header Navigation with Tab Triggers */}
       <nav className="max-w-6xl mx-auto px-4 md:px-8 mt-6">
-        <div className="flex items-center justify-between px-6 py-4 bg-white border border-slate-200 rounded-2xl shadow-sm">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 py-4 bg-white border border-slate-200 rounded-2xl shadow-xs">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-xs">
               <span className="text-white font-bold text-lg font-display">G</span>
             </div>
             <span className="font-semibold text-base md:text-lg tracking-tight text-slate-900 font-display">
-              Google AI Studio
+              Google AI Studio <span className="text-[10px] uppercase tracking-wider bg-slate-100 text-slate-500 px-2 py-1 rounded-full font-sans font-normal ml-1.5 border border-slate-200">Guia Escolar</span>
             </span>
           </div>
-          <div className="hidden md:flex space-x-6 text-xs font-bold text-slate-500 uppercase tracking-wider">
-            <a href="#build-vs-code" className="text-blue-600 border-b-2 border-blue-600 pb-0.5">Visão Geral</a>
-            <a href="#studio-explorer" className="hover:text-blue-600 transition-colors">Estúdio & Netlify</a>
-            <a href="#ai-playground" className="hover:text-blue-600 transition-colors">Playground IA</a>
-            <a href="#integrations" className="hover:text-blue-600 transition-colors">Integração</a>
-            <a href="#tutorials" className="hover:text-blue-600 transition-colors">Como Começar</a>
+
+          {/* Core multi-page Navigation Tab Selection */}
+          <div className="flex flex-wrap items-center justify-center gap-1 bg-slate-100 p-1.5 rounded-xl border border-slate-200/60 font-sans">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`flex items-center gap-1.5 py-1.5 px-3 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider ${activeTab === 'overview' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              <Home className="w-3.5 h-3.5 shrink-0" />
+              <span>Início</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('explorer')}
+              className={`flex items-center gap-1.5 py-1.5 px-3 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider ${activeTab === 'explorer' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              <Compass className="w-3.5 h-3.5 shrink-0" />
+              <span>Manual do Estúdio</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('playground')}
+              className={`flex items-center gap-1.5 py-1.5 px-3 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider relative ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              <Lightbulb className="w-3.5 h-3.5 shrink-0" />
+              <span>Playground IA</span>
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500"></span>
+            </button>
+            <button
+              onClick={() => setActiveTab('tutorials')}
+              className={`flex items-center gap-1.5 py-1.5 px-3 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider ${activeTab === 'tutorials' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              <BookOpen className="w-3.5 h-3.5 shrink-0" />
+              <span>Tutoriais & Prática</span>
+            </button>
           </div>
-          <a href="#ai-playground" className="px-4 py-2.5 bg-slate-950 hover:bg-slate-850 text-white rounded-full text-2xs font-bold uppercase tracking-wider transition-all">
-            Começar Agora
-          </a>
+
+          <button 
+            onClick={() => setActiveTab('playground')}
+            className="px-4 py-2.5 bg-slate-950 hover:bg-slate-850 text-white rounded-full text-2xs font-bold uppercase tracking-wider transition-all shadow-xs"
+          >
+            Abrir Gerador IA
+          </button>
         </div>
       </nav>
 
       {/* Main Content Area */}
       <main className="max-w-6xl mx-auto px-4 md:px-8 pt-8">
         
-        {/* Hero Section */}
-        <Header />
+        {/* Dynamic Route View Transitions */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.15 }}
+          >
+            {activeTab === 'overview' && (
+              <div className="space-y-6">
+                <Header />
+                <BuildVsCode />
+                
+                {/* Visual wizard guide helper */}
+                <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
+                  <div className="text-left">
+                    <h4 className="font-bold text-slate-900 text-sm">Gostaria de ver como estruturar chaves API ou publicar no Netlify/GitHub?</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Visite o manual detalhado para entender as mecânicas de compilação e alojamento.</p>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab('explorer')}
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center"
+                  >
+                    <span>Seguinte: Manual do Estúdio</span>
+                    <Compass className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
 
-        {/* Build vs Code Deep Dive Section */}
-        <BuildVsCode />
+            {activeTab === 'explorer' && (
+              <div className="space-y-6">
+                <StudioExplorer />
+                
+                {/* Visual wizard guide helper */}
+                <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
+                  <div className="text-left">
+                    <h4 className="font-bold text-slate-900 text-sm">Pronto para testar a Inteligência Artificial diretamente?</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Utilize o nosso Playground de testes interativos para criar planos de aula, rubricas e atividades escolares.</p>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab('playground')}
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center"
+                  >
+                    <span>Seguinte: Playground IA</span>
+                    <Lightbulb className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
 
-        {/* Studio Explorer: Features screenshots and Publishing guide */}
-        <StudioExplorer />
+            {activeTab === 'playground' && (
+              <div className="space-y-6">
+                <AIPlanner />
+                
+                {/* Visual wizard guide helper */}
+                <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
+                  <div className="text-left">
+                    <h4 className="font-bold text-slate-900 text-sm">Deseja ver tutoriais práticos passo a passo e o manual de integração?</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Descubra as regras de ouro para implementar a IA no Classroom, Teams ou Moodle de forma integrada.</p>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab('tutorials')}
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center"
+                  >
+                    <span>Seguinte: Tutoriais & Prática</span>
+                    <BookOpen className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
 
-        {/* AI Generator Real Interactive Playground */}
-        <AIPlanner />
-
-        {/* Integrations with Classroom, Docs, sheets, etc */}
-        <Integrations />
-
-        {/* Step-by-Step Practical Tutorial */}
-        <PracticalTutorial />
+            {activeTab === 'tutorials' && (
+              <div className="space-y-6">
+                <PracticalTutorial />
+                <Integrations />
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
 
         {/* Pedagogical Safety & Ethics Reminder Footer */}
-        <footer className="mt-16 bg-white border border-slate-200 p-8 rounded-3xl text-left max-w-4xl mx-auto shadow-sm">
+        <footer className="mt-16 bg-white border border-slate-200 p-8 rounded-3xl text-left max-w-4xl mx-auto shadow-xs font-sans">
           <div className="flex flex-col md:flex-row items-start gap-5">
-            <div className="bg-amber-50 border border-amber-200 p-3 rounded-2xl text-amber-750 shrink-0">
-              <ShieldAlert className="w-6 h-6 prose-amber" />
+            <div className="bg-amber-50 border border-amber-200 p-3 rounded-2xl text-amber-700 shrink-0">
+              <ShieldAlert className="w-6 h-6" />
             </div>
             <div>
               <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center gap-1.5 font-display">
