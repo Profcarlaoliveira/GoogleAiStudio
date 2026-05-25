@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { BookOpen, Sparkles, Wand2, Copy, FileText, Check, LayoutGrid, Award, Lightbulb, AlertTriangle, Key, Save } from "lucide-react";
+import { BookOpen, Sparkles, Wand2, Copy, FileText, Check, LayoutGrid, Award, Lightbulb, AlertTriangle, Key, Save, Eye, EyeOff } from "lucide-react";
 
 export default function AIPlanner() {
   const [activeMode, setActiveMode] = useState<'planner' | 'rubric' | 'activity'>('planner');
@@ -12,11 +12,14 @@ export default function AIPlanner() {
   // Standalone mode / Static deploy API Key configuration
   const [customApiKey, setCustomApiKey] = useState(() => localStorage.getItem("CUSTOM_GEMINI_API_KEY") || "");
   const [showApiKeySetting, setShowApiKeySetting] = useState(false);
+  const [showKeyText, setShowKeyText] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
   const saveCustomApiKey = (key: string) => {
-    localStorage.setItem("CUSTOM_GEMINI_API_KEY", key);
-    setCustomApiKey(key);
+    // Sanitizar a chave removendo espaços em branco ou aspas extra indesejadas
+    const cleanedKey = key.trim().replace(/^["']|["']$/g, '');
+    localStorage.setItem("CUSTOM_GEMINI_API_KEY", cleanedKey);
+    setCustomApiKey(cleanedKey);
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
   };
@@ -161,8 +164,8 @@ export default function AIPlanner() {
       let fetchSuccessful = false;
       let apiValidationError = "";
 
-      // 1. If we have a custom API key, try using it first
-      const apiKey = customApiKey.trim();
+      // 1. If we have a custom API key, try using it first, otherwise check for Vite build-time environment variable
+      const apiKey = customApiKey.trim() || ((import.meta as any).env?.VITE_GEMINI_API_KEY || "").trim();
       if (apiKey) {
         try {
           const endpointsToTry = [
@@ -502,7 +505,7 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
                     </span>
                   </button>
                   
-                  {customApiKey ? (
+                  {customApiKey || ((import.meta as any).env?.VITE_GEMINI_API_KEY || "").trim() ? (
                     <span className="text-[9px] bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0 border border-green-200/65">
                       <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Ativa
                     </span>
@@ -513,7 +516,7 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
                   )}
                 </div>
                 <p className="text-[10px] text-slate-500 mt-2 leading-relaxed font-sans pl-1">
-                  Apenas necessário se estiver a correr em alojamentos estáticos do browser (GitHub Pages ou Netlify).
+                  Apenas necessário se quiser usar uma chave diferente da configurada no servidor ou no Netlify.
                 </p>
 
                 <AnimatePresence>
@@ -525,14 +528,24 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
                       className="overflow-hidden mt-3 pt-3 border-t border-slate-200/60 text-left"
                     >
                       <label className="text-[10px] font-bold text-slate-800 block mb-1">Insira a sua Chave API do Google AI Studio:</label>
-                      <div className="flex gap-1.5">
-                        <input
-                          type="password"
-                          placeholder="Cole a sua chave aqui (AIzaSy...)"
-                          value={customApiKey}
-                          onChange={(e) => saveCustomApiKey(e.target.value)}
-                          className="flex-grow text-xs px-2.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
-                        />
+                      <div className="flex gap-1.5 items-stretch">
+                        <div className="relative flex-grow">
+                          <input
+                            type={showKeyText ? "text" : "password"}
+                            placeholder="Cole a sua chave aqui (AIzaSy...)"
+                            value={customApiKey}
+                            onChange={(e) => saveCustomApiKey(e.target.value)}
+                            className="w-full text-xs pl-2.5 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowKeyText(!showKeyText)}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
+                            title={showKeyText ? "Ocultar Chave" : "Mostrar Chave"}
+                          >
+                            {showKeyText ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                          </button>
+                        </div>
                         {customApiKey && (
                           <button
                             type="button"
@@ -545,6 +558,11 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
                       </div>
                       {isSaved && (
                         <p className="text-[10px] text-green-700 font-bold mt-1">Chave guardada com sucesso no seu navegador!</p>
+                      )}
+                      {((import.meta as any).env?.VITE_GEMINI_API_KEY || "").trim() && !customApiKey && (
+                        <p className="text-[10px] text-indigo-700 font-bold mt-1">
+                          ✨ A usar por defeito a Chave API global configurada no Netlify!
+                        </p>
                       )}
                       <span className="text-[10px] text-slate-400 block mt-2 leading-normal">
                         Obtenha a sua chave totalmente grátis em <a href="https://aistudio.google.com/" target="_blank" rel="noreferrer" className="text-blue-500 underline font-semibold hover:text-blue-600">aistudio.google.com</a>. Fica guardada localmente de forma 100% segura.
