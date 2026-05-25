@@ -29,12 +29,9 @@ export default function App() {
               <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-xs shrink-0">
                 <span className="text-white font-bold text-xl font-display">G</span>
               </div>
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-2">
                 <span className="font-bold text-lg md:text-xl tracking-tight text-slate-900 font-display">
                   Google AI Studio
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full font-sans font-normal border border-slate-200 whitespace-nowrap">
-                  Guia Escolar
                 </span>
               </div>
             </div>
@@ -65,12 +62,10 @@ export default function App() {
             </button>
             <button
               onClick={() => setActiveTab('playground')}
-              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider relative grow md:grow-0 justify-center ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
+              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Lightbulb className="w-3.5 h-3.5 shrink-0" />
               <span>Playground IA</span>
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500"></span>
             </button>
             <button
               onClick={() => setActiveTab('publishing')}
