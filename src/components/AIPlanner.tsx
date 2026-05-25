@@ -257,13 +257,13 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
       
       // Headers
       if (trimmedLine.startsWith("###")) {
-        return <h4 key={idx} className="text-base font-bold text-slate-800 mt-4 mb-2 tracking-tight">{trimmedLine.replace("###", "").trim()}</h4>;
+        return <h4 key={idx} className="text-base font-bold text-blue-400 mt-4 mb-2 tracking-tight">{trimmedLine.replace("###", "").trim()}</h4>;
       }
       if (trimmedLine.startsWith("##")) {
-        return <h3 key={idx} className="text-lg font-bold text-indigo-900 mt-6 mb-3 border-b border-indigo-100 pb-1 tracking-tight">{trimmedLine.replace("##", "").trim()}</h3>;
+        return <h3 key={idx} className="text-lg font-bold text-indigo-300 mt-6 mb-3 border-b border-indigo-900/60 pb-1 tracking-tight">{trimmedLine.replace("##", "").trim()}</h3>;
       }
       if (trimmedLine.startsWith("#")) {
-        return <h2 key={idx} className="text-xl font-extrabold text-indigo-950 mt-8 mb-4 tracking-tight">{trimmedLine.replace("#", "").trim()}</h2>;
+        return <h2 key={idx} className="text-xl font-extrabold text-indigo-200 mt-8 mb-4 tracking-tight">{trimmedLine.replace("#", "").trim()}</h2>;
       }
 
       // Check bullet items starting with '*' or '-'
@@ -271,7 +271,7 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
         // Remove markdown strong markers (**bold**) inside list element
         const content = trimmedLine.substring(1).trim();
         return (
-          <ul key={idx} className="list-disc pl-6 py-0.5 space-y-1 text-slate-700 text-sm leading-relaxed">
+          <ul key={idx} className="list-disc pl-6 py-0.5 space-y-1 text-slate-300 text-sm leading-relaxed">
             <li>{parseBoldText(content)}</li>
           </ul>
         );
@@ -281,7 +281,7 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
       const numMatch = trimmedLine.match(/^(\d+)\.\s(.*)/);
       if (numMatch) {
         return (
-          <ol key={idx} className="list-decimal pl-6 py-0.5 text-slate-700 text-sm leading-relaxed">
+          <ol key={idx} className="list-decimal pl-6 py-0.5 text-slate-350 text-sm leading-relaxed">
             <li>{parseBoldText(numMatch[2])}</li>
           </ol>
         );
@@ -293,7 +293,7 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
       }
 
       // Default paragraph with bold word support
-      return <p key={idx} className="text-sm text-slate-700 leading-relaxed mb-3">{parseBoldText(trimmedLine)}</p>;
+      return <p key={idx} className="text-sm text-slate-350 leading-relaxed mb-3">{parseBoldText(trimmedLine)}</p>;
     });
   };
 
@@ -303,7 +303,7 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
     return parts.map((part, i) => {
       // odd indices are enclosed by **
       if (i % 2 === 1) {
-        return <strong key={i} className="font-bold text-slate-900">{part}</strong>;
+        return <strong key={i} className="font-extrabold text-white">{part}</strong>;
       }
       return part;
     });
@@ -327,26 +327,29 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
         </div>
 
         {/* Rapid Choice bar */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl max-w-3xl mx-auto border border-slate-200">
+        <div className="flex flex-wrap justify-center gap-1.5 mb-8 bg-slate-100 p-1.5 rounded-2xl max-w-3xl mx-auto border border-slate-200">
           <button
             onClick={() => setActiveMode('planner')}
-            className={`flex items-center gap-2 py-2.5 px-5 rounded-xl text-xs font-semibold transition-all ${activeMode === 'planner' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-700 hover:bg-slate-200'}`}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-150 ${activeMode === 'planner' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-white'}`}
           >
-            <BookOpen className="w-4 h-4" /> Plano de Aula Detalhado
+            <BookOpen className="w-4 h-4 shrink-0" /> 
+            <span>Plano de Aula</span>
           </button>
           
           <button
             onClick={() => setActiveMode('rubric')}
-            className={`flex items-center gap-2 py-2.5 px-5 rounded-xl text-xs font-semibold transition-all ${activeMode === 'rubric' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-700 hover:bg-slate-200'}`}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-150 ${activeMode === 'rubric' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-white'}`}
           >
-            <Award className="w-4 h-4" /> Grelha de Avaliação (Rubrica)
+            <Award className="w-4 h-4 shrink-0" /> 
+            <span>Rúbrica de Avaliação</span>
           </button>
           
           <button
             onClick={() => setActiveMode('activity')}
-            className={`flex items-center gap-2 py-2.5 px-5 rounded-xl text-xs font-semibold transition-all ${activeMode === 'activity' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-700 hover:bg-slate-200'}`}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-150 ${activeMode === 'activity' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-white'}`}
           >
-            <Lightbulb className="w-4 h-4" /> Atividade Prática Ativa
+            <Lightbulb className="w-4 h-4 shrink-0" /> 
+            <span>Atividade Prática</span>
           </button>
         </div>
 
@@ -355,64 +358,90 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
           
           {/* Inputs Panel */}
           <div className="lg:col-span-5 bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-xs">
-            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-6 pb-2 border-b border-slate-100 flex items-center justify-between">
+            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-6 pb-2 border-b border-slate-100 flex items-center justify-between">
               <span>Configuração dos Dados</span>
-              <span className="text-2xs bg-blue-50 text-blue-600 font-semibold px-2 py-1.5 rounded-md">Atalho IA</span>
+              <span className="text-2xs bg-blue-50 text-blue-700 font-bold px-2 py-1.5 rounded-md border border-blue-100/40">Atalho IA</span>
             </h3>
 
-            {/* Quick Demo Pre-fills */}
+            {/* Quick Demo Pre-fills organized as structured cards */}
             <div className="mb-6">
-              <span className="text-[11px] font-semibold text-slate-500 block mb-2">Preencher Configurações de Exemplo:</span>
-              <div className="flex flex-wrap gap-1.5 mb-4">
+              <span className="text-xs font-bold text-slate-800 block mb-2.5">Carregar Atividades de Exemplo:</span>
+              
+              <div className="grid grid-cols-2 gap-2 mb-4 font-sans">
                 <button
                   onClick={() => selectSample(samples[0])}
-                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-2xs px-2.5 py-1.5 rounded-md transition-all font-medium"
+                  className="bg-emerald-50 hover:bg-emerald-100/90 text-emerald-900 border border-emerald-200/80 hover:border-emerald-350 text-2xs p-2.5 rounded-xl transition-all font-bold text-left flex items-start gap-1.5 cursor-pointer"
                 >
-                  🧬 Ciências (Fotossíntese)
+                  <span className="text-xs">🧬</span>
+                  <div>
+                    <span className="block font-bold">Ciências</span>
+                    <span className="text-[10px] text-emerald-700/90 font-medium">Fotossíntese</span>
+                  </div>
                 </button>
+
                 <button
                   onClick={() => selectSample(samples[1])}
-                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-2xs px-2.5 py-1.5 rounded-md transition-all font-medium"
+                  className="bg-amber-50 hover:bg-amber-100/90 text-amber-900 border border-amber-200/80 hover:border-amber-300 text-2xs p-2.5 rounded-xl transition-all font-bold text-left flex items-start gap-1.5 cursor-pointer"
                 >
-                  ⛵ História (Descobrimentos)
+                  <span className="text-xs">⛵</span>
+                  <div>
+                    <span className="block font-bold">História</span>
+                    <span className="text-[10px] text-amber-700/90 font-medium">Descobrimentos</span>
+                  </div>
                 </button>
+
                 <button
                   onClick={() => selectSample(samples[2])}
-                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-2xs px-2.5 py-1.5 rounded-md transition-all font-medium"
+                  className="bg-blue-50 hover:bg-blue-100/90 text-blue-900 border border-blue-200/80 hover:border-blue-300 text-2xs p-2.5 rounded-xl transition-all font-bold text-left flex items-start gap-1.5 cursor-pointer"
                 >
-                  💬 Oralidade (Grelha Português)
+                  <span className="text-xs">💬</span>
+                  <div>
+                    <span className="block font-bold">Oralidade</span>
+                    <span className="text-[10px] text-blue-700/90 font-medium">Grelha Português</span>
+                  </div>
                 </button>
+
                 <button
                   onClick={() => selectSample(samples[3])}
-                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-2xs px-2.5 py-1.5 rounded-md transition-all font-medium"
+                  className="bg-purple-50 hover:bg-purple-100/90 text-purple-900 border border-purple-200/80 hover:border-purple-300 text-2xs p-2.5 rounded-xl transition-all font-bold text-left flex items-start gap-1.5 cursor-pointer"
                 >
-                  📐 Pitágoras (Scape Room)
+                  <span className="text-xs">📐</span>
+                  <div>
+                    <span className="block font-bold">Pitágoras</span>
+                    <span className="text-[10px] text-purple-700/90 font-medium">Escape Room</span>
+                  </div>
                 </button>
               </div>
 
-              {/* API Key Standalone Configuration drawer */}
-              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl">
-                <div className="flex items-center justify-between">
+              {/* API Key Standalone Configuration drawer styled to match Premium styling */}
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden">
+                <div className="flex items-center justify-between gap-1.5">
                   <button
                     type="button"
                     onClick={() => setShowApiKeySetting(!showApiKeySetting)}
-                    className="flex items-center gap-2 text-[11px] font-bold text-slate-700 hover:text-blue-600 transition-colors uppercase tracking-wider text-left"
+                    className="flex-grow flex items-center justify-between py-2 px-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg shadow-2xs text-[11px] font-bold text-slate-800 transition-all text-left"
                   >
-                    <Key className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                    <span>Configurar Chave API Própria</span>
+                    <div className="flex items-center gap-2">
+                      <Key className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                      <span>Configurar Chave API Própria</span>
+                    </div>
+                    <span className="text-[9px] text-slate-400 font-medium">
+                      {showApiKeySetting ? "Ocultar" : "Mostrar"}
+                    </span>
                   </button>
+                  
                   {customApiKey ? (
-                    <span className="text-[9px] bg-green-150 text-green-800 font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1 shrink-0">
+                    <span className="text-[9px] bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0 border border-green-200/65">
                       <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Ativa
                     </span>
                   ) : (
-                    <span className="text-[9px] bg-slate-200 text-slate-600 font-semibold px-1.5 py-0.5 rounded-full shrink-0">
-                      Sem Chave
+                    <span className="text-[9px] bg-slate-200 text-slate-700 font-semibold px-2 py-0.5 rounded-full shrink-0 border border-slate-300/40">
+                      Vazia
                     </span>
                   )}
                 </div>
-                <p className="text-[10px] text-slate-500 mt-1 leading-relaxed">
-                  Apenas necessário para correr a IA de forma direta se o seu site estiver no GitHub Pages ou Netlify simples.
+                <p className="text-[10px] text-slate-500 mt-2 leading-relaxed font-sans pl-1">
+                  Apenas necessário se estiver a correr em alojamentos estáticos do browser (GitHub Pages ou Netlify).
                 </p>
 
                 <AnimatePresence>
@@ -423,30 +452,30 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden mt-3 pt-3 border-t border-slate-200/60 text-left"
                     >
-                      <label className="text-[10px] font-bold text-slate-700 block mb-1">Insina a sua Chave API do Google AI Studio:</label>
+                      <label className="text-[10px] font-bold text-slate-800 block mb-1">Insira a sua Chave API do Google AI Studio:</label>
                       <div className="flex gap-1.5">
                         <input
                           type="password"
                           placeholder="Cole a sua chave aqui (AIzaSy...)"
                           value={customApiKey}
                           onChange={(e) => saveCustomApiKey(e.target.value)}
-                          className="flex-grow text-xs px-2.5 py-2 rounded border border-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                          className="flex-grow text-xs px-2.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
                         />
                         {customApiKey && (
                           <button
                             type="button"
                             onClick={clearCustomApiKey}
-                            className="px-2 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-250 text-rose-700 rounded text-[10px] font-bold transition-all"
+                            className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 rounded-lg text-[10px] font-bold transition-all shrink-0"
                           >
                             Limpar
                           </button>
                         )}
                       </div>
                       {isSaved && (
-                        <p className="text-[10px] text-green-600 font-semibold mt-1">Chave guardada com sucesso no seu navegador!</p>
+                        <p className="text-[10px] text-green-700 font-bold mt-1">Chave guardada com sucesso no seu navegador!</p>
                       )}
-                      <span className="text-[10px] text-slate-400 block mt-2">
-                        Obtenha a sua chave grátis em <a href="https://aistudio.google.com/" target="_blank" rel="noreferrer" className="text-blue-500 underline font-semibold">aistudio.google.com</a>. Fica guardada localmente no seu dispositivo.
+                      <span className="text-[10px] text-slate-400 block mt-2 leading-normal">
+                        Obtenha a sua chave totalmente grátis em <a href="https://aistudio.google.com/" target="_blank" rel="noreferrer" className="text-blue-500 underline font-semibold hover:text-blue-600">aistudio.google.com</a>. Fica guardada localmente de forma 100% segura.
                       </span>
                     </motion.div>
                   )}

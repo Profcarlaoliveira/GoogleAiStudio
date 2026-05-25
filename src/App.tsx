@@ -5,11 +5,12 @@ import StudioExplorer from "./components/StudioExplorer";
 import AIPlanner from "./components/AIPlanner";
 import Integrations from "./components/Integrations";
 import PracticalTutorial from "./components/PracticalTutorial";
-import { BookOpen, Sparkles, LayoutGrid, Award, ShieldAlert, GraduationCap, Cpu, Home, Compass, Lightbulb } from "lucide-react";
+import PublishingGuide from "./components/PublishingGuide";
+import { BookOpen, Sparkles, LayoutGrid, Award, ShieldAlert, GraduationCap, Cpu, Home, Compass, Lightbulb, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
-  const [activeTab, setActiveTab ] = useState<'overview' | 'explorer' | 'playground' | 'tutorials'>('overview');
+  const [activeTab, setActiveTab ] = useState<'overview' | 'explorer' | 'playground' | 'publishing' | 'tutorials'>('overview');
 
   // Smoothly scroll back to the top on page/tab changes for absolute comfort
   useEffect(() => {
@@ -19,12 +20,6 @@ export default function App() {
   return (
     <div id="main-container" className="min-h-screen bg-slate-50 text-slate-800 antialiased selection:bg-indigo-500 selection:text-white pb-24 font-sans">
       
-      {/* Educational Promo Top Banner (subtle and high-contrast) */}
-      <div id="top-school-banner" className="bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white py-3 px-4 text-center text-xs font-semibold relative z-20 flex items-center justify-center gap-2">
-        <Sparkles className="w-4 h-4 text-amber-300 animate-bounce" />
-        <span>Como é que a Inteligência Artificial pode apoiar o Ensino em Portugal? Explore abaixo!</span>
-      </div>
-
       {/* Header Navigation with Tab Triggers */}
       <nav className="max-w-6xl mx-auto px-4 md:px-8 mt-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 py-4 bg-white border border-slate-200 rounded-2xl shadow-xs">
@@ -61,6 +56,13 @@ export default function App() {
               <span>Playground IA</span>
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500"></span>
+            </button>
+            <button
+              onClick={() => setActiveTab('publishing')}
+              className={`flex items-center gap-1.5 py-1.5 px-3 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider ${activeTab === 'publishing' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              <Globe className="w-3.5 h-3.5 shrink-0" />
+              <span>Como Publicar</span>
             </button>
             <button
               onClick={() => setActiveTab('tutorials')}
@@ -138,6 +140,27 @@ export default function App() {
             {activeTab === 'playground' && (
               <div className="space-y-6">
                 <AIPlanner />
+                
+                {/* Visual wizard guide helper */}
+                <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
+                  <div className="text-left">
+                    <h4 className="font-bold text-slate-900 text-sm">Gostaria de ver como publicar o seu site na web de forma 100% gratuita?</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Aprenda a alojar no Netlify, GitHub Pages ou Vercel de forma autónoma e simples.</p>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab('publishing')}
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center"
+                  >
+                    <span>Seguinte: Como Publicar</span>
+                    <Globe className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'publishing' && (
+              <div className="space-y-6">
+                <PublishingGuide />
                 
                 {/* Visual wizard guide helper */}
                 <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
