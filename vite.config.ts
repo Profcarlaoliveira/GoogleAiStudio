@@ -2,10 +2,21 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
+import dotenv from 'dotenv';
+
+// Load .env files if present (essential for local dev/Vite builds)
+dotenv.config();
 
 export default defineConfig(() => {
+  const chaveKeyValue = process.env.ChaveKey || process.env.VITE_GEMINI_API_KEY || '';
+  
   return {
     plugins: [react(), tailwindcss()],
+    envPrefix: ['VITE_', 'ChaveKey', 'CHAVE_KEY'],
+    define: {
+      'process.env.ChaveKey': JSON.stringify(chaveKeyValue),
+      'import.meta.env.ChaveKey': JSON.stringify(chaveKeyValue),
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

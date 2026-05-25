@@ -165,7 +165,10 @@ export default function AIPlanner() {
       let apiValidationError = "";
 
       // 1. If we have a custom API key, try using it first, otherwise check for Vite build-time environment variable
-      const apiKey = customApiKey.trim() || ((import.meta as any).env?.VITE_GEMINI_API_KEY || "").trim();
+      const apiKey = customApiKey.trim() || 
+                     ((import.meta as any).env?.ChaveKey || 
+                      (process as any).env?.ChaveKey || 
+                      (import.meta as any).env?.VITE_GEMINI_API_KEY || "").trim();
       if (apiKey) {
         try {
           const endpointsToTry = [
@@ -505,7 +508,7 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
                     </span>
                   </button>
                   
-                  {customApiKey || ((import.meta as any).env?.VITE_GEMINI_API_KEY || "").trim() ? (
+                  {customApiKey || ((import.meta as any).env?.ChaveKey || (process as any).env?.ChaveKey || (import.meta as any).env?.VITE_GEMINI_API_KEY || "").trim() ? (
                     <span className="text-[9px] bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0 border border-green-200/65">
                       <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Ativa
                     </span>
@@ -559,9 +562,9 @@ Detetámos que a sua aplicação está a carregar de forma **estática** (por ex
                       {isSaved && (
                         <p className="text-[10px] text-green-700 font-bold mt-1">Chave guardada com sucesso no seu navegador!</p>
                       )}
-                      {((import.meta as any).env?.VITE_GEMINI_API_KEY || "").trim() && !customApiKey && (
+                      {(((import.meta as any).env?.ChaveKey || (process as any).env?.ChaveKey || (import.meta as any).env?.VITE_GEMINI_API_KEY) || "").trim() && !customApiKey && (
                         <p className="text-[10px] text-indigo-700 font-bold mt-1">
-                          ✨ A usar por defeito a Chave API global configurada no Netlify!
+                          ✨ A usar por defeito a Chave API "ChaveKey" do Netlify!
                         </p>
                       )}
                       <span className="text-[10px] text-slate-400 block mt-2 leading-normal">
