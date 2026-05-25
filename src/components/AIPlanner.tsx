@@ -159,6 +159,7 @@ export default function AIPlanner() {
 
       let textResult = "";
       let fetchSuccessful = false;
+      let apiValidationError = "";
 
       // 1. If we have a custom API key, try using it first
       const apiKey = customApiKey.trim();
@@ -199,6 +200,7 @@ export default function AIPlanner() {
 
           if (!fetchSuccessful) {
             console.warn(`Direct client call with custom API key failed (Error: ${lastError}). Attempting server proxy fallback...`);
+            apiValidationError = lastError || "";
           }
         } catch (err) {
           console.warn("Direct client call failed, using server fallback", err);
@@ -235,19 +237,71 @@ export default function AIPlanner() {
       if (fetchSuccessful) {
         setResult(textResult || "Sem resposta obtida do modelo.");
       } else {
-        // Show rich localized markdown help guide explaining exactly how to fix the static deploy error
-        setResult(`### 🛑 Erro de Ligação: Chave API necessária para o site publicado!
+        // If they provided a custom API key and it failed with a specific API validation error
+        if (apiKey && apiValidationError) {
+          if (apiValidationError.toLowerCase().includes("not found for api version") || 
+              apiValidationError.toLowerCase().includes("not supported for generatecontent") ||
+              apiValidationError.toLowerCase().includes("not found") ||
+              apiValidationError.toLowerCase().includes("method not found")) {
+            setResult(`### 🛑 Ativar Generative Language API na Consola do Google Cloud
 
-Detetámos que a sua aplicação está a carregar de forma **estática** (por exemplo, no GitHub Pages ou Netlify simples), o que significa que não tem um servidor ativo (\`server.ts\` / Node.js) em segundo plano para fazer chamadas seguras automáticas.
+A chave API que inseriu (que começa com **AIzaSy**) parece ser uma chave da **Consola do Google Cloud (GCP)**, mas a **Generative Language API** (API de Linguagem do Gemini) não está ativada no seu projeto de Cloud.
 
-**Para colocar a sua aplicação a funcionar 100% grátis e sem erros do seu browser, faça isto:**
+**Como resolver isto em 1 minuto:**
 
-1. Obtenha uma **Chave API Grátis** em segundos acedendo ao [Google AI Studio](https://aistudio.google.com/).
-2. Clique no novo botão **"🔑 Configurar Chave API Própria"** que adicionámos ao lado, na barra de configuração.
-3. Cole lá a sua chave e guarde. Ela fica gravada apenas no seu navegador de forma pessoal e sem limites!
+- **Opção Recomendada (Mais Simples e Segura):**
+  1. Aceda à consola gratuita do **[Google AI Studio](https://aistudio.google.com/)**.
+  2. Garanta que tem sessão iniciada com a sua conta Google.
+  3. Clique em **"Get API key"** (Obter Chave API) e de seguida em **"Create API key"** (Criar chave).
+  4. Copie a chave gerada e substitua-a aqui na barra de configuração. As chaves do AI Studio funcionam imediatamente e sem limites!
+
+- **Opção para Google Cloud (GCP):**
+  1. Aceda de forma direta à [Biblioteca de APIs do Google Cloud](https://console.cloud.google.com/apis/library/generativelanguage.googleapis.com).
+  2. Selecione o projeto associada à sua chave na barra azul superior do ecrã.
+  3. Clique no botão azul **"Ativar"** (Enable).
+  4. Aguarde cerca de 10 segundos para propagação global e execute a geração novamente aqui!
 
 ---
-*Nota para servidores reais:* Caso aloje a aplicação completa num serviço com suporte de backend real (como Render, Fly.io ou Google Cloud Run), a aplicação comunicará automaticamente com a chave secreta guardada nas variáveis de ambiente, sem os utilizadores precisarem de fazer nada!`);
+*Detalhes do erro técnico:* \`${apiValidationError}\``);
+          } else if (apiValidationError.toLowerCase().includes("api key not valid") || 
+                     apiValidationError.toLowerCase().includes("invalid key") ||
+                     apiValidationError.toLowerCase().includes("key is invalid") ||
+                     apiValidationError.toLowerCase().includes("invalid")) {
+            setResult(`### 🛑 Chave API Não Válida ou Errada
+
+A sua chave API introduzida não foi reconhecida pelos servidores oficiais da Google.
+
+**Como resolver:**
+1. Confirme se copiou a chave completa sem cortar nenhum caráter e sem espaços em branco no início ou no fim.
+2. Certifique-se de que a chave começa mesmo com **AIzaSy...**
+3. Se o erro persistir, recomendamos criar de forma imediata uma chave limpa e gratuita em [aistudio.google.com](https://aistudio.google.com/).
+
+---
+*Detalhes do erro técnico:* \`${apiValidationError}\``);
+          } else {
+            setResult(`### 🛑 Erro na Comunicação com a API (Uso de Chave Própria)
+
+A sua chave API devolveu um erro ao comunicar com os servidores da Google:
+
+**Mensagem do Erro:**
+> \`${apiValidationError}\`
+
+**Recomendações:**
+1. Aceda a [aistudio.google.com](https://aistudio.google.com/) e crie uma chave limpa e gratuita num novo projeto.
+2. Confirme se não possui restrições de IP, restrições HTTP (referers) ou restrições de APIs ativas nas propriedades dessa chave API na Consola do Google Cloud (GCP).`);
+          }
+        } else {
+          // General connection error with instructions
+          setResult(`### 🛑 Erro de Ligação: Chave API necessária para o site publicado!
+
+Detetámos que a sua aplicação está a carregar de forma **estática** (por exemplo, no Netlify ou GitHub Pages), o que significa que o servidor local está inativo e necessita de uma Chave API inserida no browser para funcionar de forma autónoma.
+
+**Como colocar o site publicado a funcionar grátis em menos de 1 minuto:**
+
+1. Obtenha uma **Chave API Grátis** acedendo ao [Google AI Studio](https://aistudio.google.com/).
+2. Clique no botão de configuração azul **"Configurar Chave API Própria"** à esquerda, cole a sua chave e guarde-a. Fica guardada apenas no seu dispositivo de forma 100% segura e privada!
+3. Experimente gerar o plano de aula novamente!`);
+        }
       }
     } catch (err: any) {
       console.error(err);

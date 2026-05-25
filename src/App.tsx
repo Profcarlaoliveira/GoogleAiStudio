@@ -22,35 +22,50 @@ export default function App() {
       
       {/* Header Navigation with Tab Triggers */}
       <nav className="max-w-6xl mx-auto px-4 md:px-8 mt-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 py-4 bg-white border border-slate-200 rounded-2xl shadow-xs">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-xs">
-              <span className="text-white font-bold text-lg font-display">G</span>
+        <div className="flex flex-col gap-4 p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
+          {/* Brand & Action Button Row */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div className="flex items-center space-x-2.5">
+              <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-xs shrink-0">
+                <span className="text-white font-bold text-xl font-display">G</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="font-bold text-lg md:text-xl tracking-tight text-slate-900 font-display">
+                  Google AI Studio
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full font-sans font-normal border border-slate-200 whitespace-nowrap">
+                  Guia Escolar
+                </span>
+              </div>
             </div>
-            <span className="font-semibold text-base md:text-lg tracking-tight text-slate-900 font-display">
-              Google AI Studio <span className="text-[10px] uppercase tracking-wider bg-slate-100 text-slate-500 px-2 py-1 rounded-full font-sans font-normal ml-1.5 border border-slate-200">Guia Escolar</span>
-            </span>
+
+            <button 
+              onClick={() => setActiveTab('playground')}
+              className="px-5 py-2.5 bg-slate-950 hover:bg-slate-850 text-white rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-xs shrink-0"
+            >
+              Abrir Gerador IA
+            </button>
           </div>
 
-          {/* Core multi-page Navigation Tab Selection */}
-          <div className="flex flex-wrap items-center justify-center gap-1 bg-slate-100 p-1.5 rounded-xl border border-slate-200/60 font-sans">
+          {/* Navigation Tab Selection (Fully spacious, centering beautifully) */}
+          <div className="flex flex-wrap items-center justify-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200/60 font-sans w-full">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`flex items-center gap-1.5 py-1.5 px-3 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider ${activeTab === 'overview' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'overview' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Home className="w-3.5 h-3.5 shrink-0" />
               <span>Início</span>
             </button>
             <button
               onClick={() => setActiveTab('explorer')}
-              className={`flex items-center gap-1.5 py-1.5 px-3 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider ${activeTab === 'explorer' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'explorer' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Compass className="w-3.5 h-3.5 shrink-0" />
               <span>Manual do Estúdio</span>
             </button>
             <button
               onClick={() => setActiveTab('playground')}
-              className={`flex items-center gap-1.5 py-1.5 px-3 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider relative ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider relative grow md:grow-0 justify-center ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Lightbulb className="w-3.5 h-3.5 shrink-0" />
               <span>Playground IA</span>
@@ -59,26 +74,19 @@ export default function App() {
             </button>
             <button
               onClick={() => setActiveTab('publishing')}
-              className={`flex items-center gap-1.5 py-1.5 px-3 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider ${activeTab === 'publishing' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'publishing' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Globe className="w-3.5 h-3.5 shrink-0" />
               <span>Como Publicar</span>
             </button>
             <button
               onClick={() => setActiveTab('tutorials')}
-              className={`flex items-center gap-1.5 py-1.5 px-3 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider ${activeTab === 'tutorials' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'tutorials' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <BookOpen className="w-3.5 h-3.5 shrink-0" />
               <span>Tutoriais & Prática</span>
             </button>
           </div>
-
-          <button 
-            onClick={() => setActiveTab('playground')}
-            className="px-4 py-2.5 bg-slate-950 hover:bg-slate-850 text-white rounded-full text-2xs font-bold uppercase tracking-wider transition-all shadow-xs"
-          >
-            Abrir Gerador IA
-          </button>
         </div>
       </nav>
 
