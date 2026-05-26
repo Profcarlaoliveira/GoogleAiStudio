@@ -35,8 +35,10 @@ interface ToolInfo {
 }
 
 export default function ConsoleExplorer() {
-  const [activeTab, setActiveTab] = useState<'sidebar' | 'tools'>('tools');
+  const [activeTab, setActiveTab ] = useState<'sidebar' | 'tools' | 'playground-cards'>('tools');
   const [sidebarClick, setSidebarClick] = useState<string>("playground");
+  const [playgroundSubTab, setPlaygroundSubTab] = useState<'models' | 'agents'>('models');
+  const [selectedPlaygroundCard, setSelectedPlaygroundCard] = useState<string>("featured");
   
   // Interactive tools panel simulation (from screenshot!)
   const [toolsState, setToolsState] = useState({
@@ -49,6 +51,120 @@ export default function ConsoleExplorer() {
   });
 
   const [selectedTool, setSelectedTool] = useState<string>("search_ground");
+
+  const playgroundModelsList = [
+    {
+      id: "featured",
+      name: "Featured",
+      desc: "Test out our most advanced and newest models.",
+      label: "Modelos em Destaque",
+      practical: "Acesso direto aos modelos mais inteligentes (ex: Gemini 2.5 Pro ou experimentais) para avaliar raciocínio profundo antes de criar aplicações.",
+      pedagogical: "Excelente para avaliar a inteligência do modelo de raiz face a questões teóricas nacionais complexas (ex: Exames Nacionais de Biologia/Geologia).",
+      prompt: "Analisa a seguinte questão de Exame Nacional do Secundário e explica a resposta correta passo a passo com base na matriz oficial..."
+    },
+    {
+      id: "code_chat",
+      name: "Code and Chat",
+      desc: "Build chatbots, agents, and code with Gemini 3.",
+      label: "Conversação e Programação",
+      practical: "A consola clássica de chat interativo do Google AI Studio para fazer perguntas abertas, manter histórico e obter sugestões de código.",
+      pedagogical: "Desenho iterativo de prompts educativos. O professor pode ajustar a conversa de forma dinâmica e testar o tom de voz da IA.",
+      prompt: "Cria uma simulação onde és um filósofo grego (Sócrates) e questionas o utilizador usando o método maiêutico nas respostas."
+    },
+    {
+      id: "image_gen",
+      name: "Image Generation",
+      desc: "Create and edit images with Nano Banana and Imagen.",
+      label: "Geração de Apoio Visual",
+      practical: "Editor visual integrado que converte as suas descrições escritas em ilustrações ou fotos de alta qualidade.",
+      pedagogical: "Criação de materiais e recursos de apoio visuais livres de direitos de autor, ótimos para capas de fichas de trabalho ou slides interativos.",
+      prompt: "Gera uma ilustração minimalista e clara, estilo vetor límpido, de uma molécula tridimensional de Clorofila para fins de biologia escolar."
+    },
+    {
+      id: "video_gen",
+      name: "Video Generation",
+      desc: "Generate videos with Veo models, our state of the art video generation models.",
+      label: "Geração de Vídeo Curto",
+      practical: "Geração de breves blocos visuais e clips em movimento de alta fidelidade recorrendo aos novos modelos físicos Veo da Google.",
+      pedagogical: "Produção de vídeos demonstrativos de processos difíceis de ilustrar em tempo real na aula (ex: erupção de vulcão ou placas tectónicas).",
+      prompt: "Gera uma animação curta e em close-up de uma célula animal a dividir-se por mitose, mostrando os cromossomas a afastar-se."
+    },
+    {
+      id: "speech_music",
+      name: "Speech and Music",
+      desc: "Explore our text to speech and music generation models.",
+      label: "Voz e Fundo Musical",
+      practical: "Conversor de PDFs e textos escritos em ficheiros de voz falada de elevada expressividade natural ou produção de melodias.",
+      pedagogical: "Promover a acessibilidade e inclusão de conteúdos de suporte para estudantes cegos, ou sonorização temática de projetos letivos de gamificação.",
+      prompt: "Cria um arquivo de voz falada em tons calmos a ler o poema 'Mar Português' de Fernando Pessoa para usar no apoio de Língua Portuguesa."
+    },
+    {
+      id: "real_time",
+      name: "Real-time",
+      desc: "Real-time voice and video with Live API.",
+      label: "Multimodalidade Ligeira (Live API)",
+      practical: "Sessões dinâmicas de voz falada e vídeo em tempo real com atraso nulo de resposta, powered de forma nativa por Live API.",
+      pedagogical: "Prática intensiva de línguas estrangeiras no formato oral. O estudante fala diretamente de viva voz com a IA, praticando a oralidade.",
+      prompt: "Atua como um examinador e falante nativo de inglês que está a realizar uma entrevista de nível B2 para aferir a fluência oral do aluno."
+    }
+  ];
+
+  const playgroundAgentsList = [
+    {
+      id: "antigravity",
+      name: "Antigravity Preview",
+      desc: "A general-purpose autonomous agent running in a remote, Google-hosted Linux environment.",
+      label: "Agente Autónomo Linux",
+      practical: "Agente inovador autónomo que consegue navegar num terminal Linux virtual da Google, executar comandos de shell e rever códigos.",
+      pedagogical: "Cenários interativos avançados nas disciplinas tecnológicas ou profissionais de informática para demonstrar a administração de sistemas.",
+      prompt: "Instala pacotes básicos de Python e corre uma simulação estatística para verificar o crescimento populacional, corrigindo falhas..."
+    },
+    {
+      id: "talk_radio",
+      name: "AI Talk Radio",
+      desc: "Transforms a text source into a polished, simulated radio show with hosts, callers, and background music.",
+      label: "Geração de Rádio/Podcasts",
+      practical: "Converte de forma automática manuscritos de texto em diálogos de rádio realistas com locutores virtuais, fintas e música no fundo.",
+      pedagogical: "Excelente para a aprendizagem auditiva. O professor converte um tema teórico comprido num podcast de rádio cativante para os alunos.",
+      prompt: "Transforma o seguinte ensaio sobre o Iluminismo numa emissão de rádio com dois debatedores dinâmicos e uma chamada de ouvinte."
+    },
+    {
+      id: "support",
+      name: "Customer Support",
+      desc: "Scans a website to build a custom knowledge base and answer support questions using that content.",
+      label: "Suporte e Dúvidas Frequentes",
+      practical: "Analisa portais de internet, manuais de conduta ou regras para estruturar um assistente que responde unicamente sobre esse documento.",
+      pedagogical: "Desenvolve um consultor do Regulamento Geral da Escola ou do plano de estudos para que alunos e famílias esclareçam regras de forma imediata.",
+      prompt: "Lê o regulamento de avaliação escolar fornecido neste endereço e responde estritamente a dúvidas sobre prazos e recursos de classificação."
+    },
+    {
+      id: "data_analyst",
+      name: "Data Analyst",
+      desc: "Delivers interactive business intelligence and data analysis using the Microsoft Northwind dataset.",
+      label: "Analista de Dados / Estatística",
+      practical: "Processa tabelas numéricas, calcula tendências de médias e entrega visualizações gráficas e relatórios analíticos limpos.",
+      pedagogical: "Auxilia o professor no cálculo estatístico de turma, identificando de imediato percentis de sucesso e pontos críticos de insucesso.",
+      prompt: "Importa a tabela de notas agregadas deste trimestre escolar e gera um sumário detalhado identificando quais os principais eixos de reforço."
+    },
+    {
+      id: "doc_proc",
+      name: "Document Processor",
+      desc: "Reconciles expenses and invoices, verifies vendors, and creates interactive HTML slideshow reports.",
+      label: "Tratamento de Documentos de Apoio",
+      practical: "Analisa múltiplos documentos PDF (recibos, relatórios didáticos) com cruzamento matemático e compila em apresentações HTML limpas.",
+      pedagogical: "Apoiar a organização burocrática e faturas em disciplinas lúdicas de Literacia Financeira ou triagem de documentação institucional.",
+      prompt: "Lê e analisa os 3 relatórios escolares anexados de forma autónoma e gera um ecrã HTML limpo que resuma as principais áreas temáticas..."
+    },
+    {
+      id: "repo_maint",
+      name: "Repo Maintainer",
+      desc: "Analyzes your codebase to identify issues, answer questions, and generate bug-fixing patches.",
+      label: "Revisor e Corretor Técnico",
+      practical: "Um analisador técnico que vasculha pastas de código para detetar erros, responder a dúvidas de arquitetura e corrigir bugs de programação.",
+      pedagogical: "Ajuda professores de informática ou robótica a rever os códigos de programação dos alunos, gerando correções comentadas na hora.",
+      prompt: "Revê este código pedagógico em Javascript partilhado pelo estudante, identifica onde está a falha de ciclo e sugere a correção."
+    }
+  ];
 
   // Detailed data for the 6 advanced tools in the screenshot
   const toolsData: Record<string, ToolInfo> = {
@@ -186,18 +302,27 @@ A viagem de autocarro escolar demorará cerca de 18 minutos."`
             </p>
           </div>
 
-          <div className="flex bg-slate-100 p-1 rounded-xl items-center gap-1 font-sans shrink-0 border border-slate-200 self-start md:self-center">
+          <div className="flex flex-wrap bg-slate-100 p-1 rounded-xl items-center gap-1 font-sans shrink-0 border border-slate-200 self-start md:self-center">
             <button
               onClick={() => setActiveTab('tools')}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${activeTab === 'tools' ? 'bg-white text-indigo-700 shadow-3xs' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition-all cursor-pointer ${activeTab === 'tools' ? 'bg-white text-indigo-700 shadow-3xs' : 'text-slate-500 hover:text-slate-800'}`}
             >
               🛠️ Ferramentas Avançadas de IA
             </button>
             <button
               onClick={() => setActiveTab('sidebar')}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${activeTab === 'sidebar' ? 'bg-white text-indigo-700 shadow-3xs' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition-all cursor-pointer ${activeTab === 'sidebar' ? 'bg-white text-indigo-700 shadow-3xs' : 'text-slate-500 hover:text-slate-800'}`}
             >
               🖥️ Menu Lateral & Consola
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('playground-cards');
+                setSelectedPlaygroundCard('featured');
+              }}
+              className={`px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition-all cursor-pointer ${activeTab === 'playground-cards' ? 'bg-white text-indigo-700 shadow-3xs' : 'text-slate-500 hover:text-slate-800'}`}
+            >
+              🕹️ Modelos vs Agentes (Playground)
             </button>
           </div>
         </div>
@@ -514,6 +639,228 @@ A viagem de autocarro escolar demorará cerca de 18 minutos."`
 
               </div>
 
+            </motion.div>
+          )}
+
+          {activeTab === 'playground-cards' && (
+            <motion.div
+              key="playground-cards-panel"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-6"
+            >
+              {/* Informational banner and description */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50/50 border border-blue-150 p-5 rounded-2xl flex items-start gap-3">
+                <Compass className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                <div className="text-xs text-slate-705 leading-relaxed font-sans space-y-1">
+                  <p>
+                    <strong>A Área de Trabalho do Playground:</strong> O Google AI Studio remodelou o seu ecrã central de acolhimento em duas secções fundamentais. Agora, pode alternar livremente entre explorar os <strong>Modelos Puros Google (Explore Google models)</strong> ou testar de forma interativa os novíssimos <strong>Agentes Pedagógicos Pré-programados (Build with Agents)</strong>.
+                  </p>
+                  <p className="text-slate-500">
+                    Clique nas pílulas azuis para alternar a perspetiva visual do simulador, selecione qualquer cartão para obter a sua explicação prática profunda de apoio à preparação das suas aulas e veja exemplos reais de prompts didáticos prontos a utilizar no console oficial!
+                  </p>
+                </div>
+              </div>
+
+              {/* Sub-tab selection pill area mimicking Google AI Studio */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 p-4 border border-slate-200 rounded-2xl">
+                <div className="text-left">
+                  <span className="text-[10px] text-slate-405 font-mono uppercase tracking-widest block font-bold">Catálogo Central de Testes</span>
+                  <h3 className="text-base font-extrabold text-slate-900 tracking-tight leading-none">
+                    {playgroundSubTab === 'models' ? 'Explore Google models (Filtro por Modelos)' : 'Build with Agents (Filtro por Agentes)'}
+                  </h3>
+                </div>
+
+                {/* Simulated original pills */}
+                <div className="flex bg-slate-205 p-1 rounded-full items-center gap-1 border border-slate-300 shadow-2xs self-start sm:self-center font-sans">
+                  <button
+                    onClick={() => {
+                      setPlaygroundSubTab('models');
+                      setSelectedPlaygroundCard('featured');
+                    }}
+                    className={`px-4 py-1.5 rounded-full text-xs font-black transition-all cursor-pointer ${playgroundSubTab === 'models' ? 'bg-indigo-600 text-white shadow-3xs' : 'text-slate-600 hover:text-slate-900'}`}
+                  >
+                    Models
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPlaygroundSubTab('agents');
+                      setSelectedPlaygroundCard('antigravity');
+                    }}
+                    className={`px-4 py-1.5 rounded-full text-xs font-black transition-all cursor-pointer ${playgroundSubTab === 'agents' ? 'bg-indigo-600 text-white shadow-3xs' : 'text-slate-600 hover:text-slate-900'}`}
+                  >
+                    Agents
+                  </button>
+                </div>
+              </div>
+
+              {/* Interactive Grid & Deep Information display */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch font-sans">
+                
+                {/* Simulated Playground Grid Panel (Left side) */}
+                <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  {playgroundSubTab === 'models' ? (
+                    playgroundModelsList.map(card => {
+                      const isActive = selectedPlaygroundCard === card.id;
+                      return (
+                        <button
+                          key={card.id}
+                          onClick={() => setSelectedPlaygroundCard(card.id)}
+                          className={`flex flex-col text-left p-4 rounded-2xl border transition-all cursor-pointer group ${
+                            isActive
+                              ? 'bg-blue-50/70 border-blue-300 ring-1 ring-blue-300 shadow-3xs'
+                              : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/50 shadow-2xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-base">
+                              {card.id === 'featured' && '⭐'}
+                              {card.id === 'code_chat' && '💬'}
+                              {card.id === 'image_gen' && '🖼️'}
+                              {card.id === 'video_gen' && '📹'}
+                              {card.id === 'speech_music' && '🎙️'}
+                              {card.id === 'real_time' && '⚡'}
+                            </span>
+                            <span className="text-xs font-bold text-slate-900 tracking-tight group-hover:text-blue-700 transition-colors">
+                              {card.name}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 leading-normal line-clamp-2">
+                            {card.desc}
+                          </p>
+                          <div className="mt-auto pt-2.5 flex items-center justify-between border-t border-slate-100 w-full">
+                            <span className="text-[9px] font-bold text-slate-400 font-mono uppercase">
+                              {card.label}
+                            </span>
+                            <ArrowRight className={`w-3.5 h-3.5 text-slate-350 transition-transform ${isActive ? 'translate-x-1 text-blue-600' : 'group-hover:translate-x-0.5'}`} />
+                          </div>
+                        </button>
+                      );
+                    })
+                  ) : (
+                    playgroundAgentsList.map(card => {
+                      const isActive = selectedPlaygroundCard === card.id;
+                      return (
+                        <button
+                          key={card.id}
+                          onClick={() => setSelectedPlaygroundCard(card.id)}
+                          className={`flex flex-col text-left p-4 rounded-2xl border transition-all cursor-pointer group ${
+                            isActive
+                              ? 'bg-blue-50/70 border-blue-300 ring-1 ring-blue-300 shadow-3xs'
+                              : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/50 shadow-2xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-base">
+                              {card.id === 'antigravity' && '🤖'}
+                              {card.id === 'talk_radio' && '📻'}
+                              {card.id === 'support' && '🙋'}
+                              {card.id === 'data_analyst' && '📈'}
+                              {card.id === 'doc_proc' && '📄'}
+                              {card.id === 'repo_maint' && '🔍'}
+                            </span>
+                            <span className="text-xs font-bold text-slate-900 tracking-tight group-hover:text-blue-700 transition-colors">
+                              {card.name}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 leading-normal line-clamp-2">
+                            {card.desc}
+                          </p>
+                          <div className="mt-auto pt-2.5 flex items-center justify-between border-t border-slate-100 w-full">
+                            <span className="text-[9px] font-bold text-slate-400 font-mono uppercase">
+                              {card.label}
+                            </span>
+                            <ArrowRight className={`w-3.5 h-3.5 text-slate-350 transition-transform ${isActive ? 'translate-x-1 text-blue-600' : 'group-hover:translate-x-0.5'}`} />
+                          </div>
+                        </button>
+                      );
+                    })
+                  )}
+
+                  {/* Empty space card mock footer */}
+                  <div className="sm:col-span-2 p-4 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between">
+                    <div className="text-left">
+                      <h5 className="text-[11px] font-extrabold text-slate-800 font-sans">Pretende criar um Prompt totalmente do zero?</h5>
+                      <span className="text-[10px] text-slate-500 font-sans">Clique na barra superior no botão superior (+) para uma nova conversa em branco.</span>
+                    </div>
+                    <span className="text-xs font-bold text-indigo-600 font-mono bg-indigo-50 border border-indigo-150 px-2.5 py-1 rounded-lg shrink-0">
+                      Start building →
+                    </span>
+                  </div>
+                </div>
+
+                {/* Explainer Panel & Interactive prompt generator (Right side) */}
+                <div className="lg:col-span-5 bg-slate-50/70 border border-slate-200 rounded-3xl p-6 flex flex-col justify-between">
+                  {(() => {
+                    const activeCard = (playgroundSubTab === 'models' ? playgroundModelsList : playgroundAgentsList).find(c => c.id === selectedPlaygroundCard) || (playgroundSubTab === 'models' ? playgroundModelsList[0] : playgroundAgentsList[0]);
+                    
+                    return (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-105 text-blue-800 text-[10px] font-extrabold uppercase rounded-full">
+                            {playgroundSubTab === 'models' ? 'Explore Models' : 'Build Agents'}
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-mono bg-white px-2.5 py-0.5 rounded border border-slate-200 shadow-3xs">
+                            {activeCard.name}
+                          </span>
+                        </div>
+
+                        <div>
+                          <h4 className="text-base font-extrabold text-slate-900 tracking-tight leading-none mb-1">
+                            {activeCard.name} ({activeCard.label})
+                          </h4>
+                          <em className="text-[10px] text-slate-450 block leading-tight">
+                            &quot;{activeCard.desc}&quot;
+                          </em>
+                        </div>
+
+                        {/* Practical Guide */}
+                        <div className="space-y-1 text-left">
+                          <strong className="text-[11px] font-bold text-slate-800 uppercase tracking-wide block">💡 O que é na prática?</strong>
+                          <p className="text-xs text-slate-650 leading-relaxed font-sans mt-0.5">
+                            {activeCard.practical}
+                          </p>
+                        </div>
+
+                        {/* Educational Value */}
+                        <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl space-y-1 text-left">
+                          <strong className="text-[11px] font-extrabold text-indigo-900 uppercase tracking-wide block flex items-center gap-1">
+                            🎒 Utilização na Escola / Professores:
+                          </strong>
+                          <p className="text-xs text-indigo-950 font-medium leading-relaxed mt-0.5 font-sans">
+                            {activeCard.pedagogical}
+                          </p>
+                        </div>
+
+                        {/* Interactive ready-to-use Prompt */}
+                        <div className="space-y-2 text-left pt-2 border-t border-slate-200">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-bold text-slate-455 uppercase tracking-wider block">
+                              Exemplo de Prompt para Copiar:
+                            </span>
+                            <button
+                              onClick={() => {
+                                navigator.clipboard.writeText(activeCard.prompt);
+                                alert("Prompt copiado com sucesso! Pode agora colá-lo no Google AI Studio.");
+                              }}
+                              className="px-2.5 py-1 bg-white border border-slate-200 text-slate-650 hover:bg-slate-100 text-[10px] rounded-lg font-bold transition-all shadow-3xs shrink-0 cursor-pointer"
+                            >
+                              Copiar Exemplo
+                            </button>
+                          </div>
+
+                          <div className="p-3 bg-slate-950 text-emerald-400 rounded-xl font-mono text-2xs leading-relaxed max-h-[140px] overflow-y-auto block border border-slate-900">
+                            &quot;{activeCard.prompt}&quot;
+                          </div>
+                        </div>
+
+                      </div>
+                    );
+                  })()}
+                </div>
+
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
