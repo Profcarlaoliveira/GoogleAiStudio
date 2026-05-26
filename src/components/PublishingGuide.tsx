@@ -106,6 +106,31 @@ export default function PublishingGuide() {
           </div>
         </div>
 
+        {/* ALERTA: Resolução do Erro e Blank Screen */}
+        <div className="bg-rose-50 border border-rose-200 p-6 rounded-2xl mb-8 flex flex-col md:flex-row items-stretch gap-4 font-sans text-left">
+          <div className="bg-white border border-rose-200 p-4 rounded-xl flex items-center justify-center text-4xl shrink-0">
+            ⚠️
+          </div>
+          <div className="space-y-2">
+            <h4 className="font-extrabold text-rose-950 text-xs sm:text-sm uppercase tracking-wider">
+              A sua página aparece completamente em BRANCO (ou não mostra nada) na Web?
+            </h4>
+            <div className="text-2xs sm:text-xs text-rose-900 leading-relaxed space-y-2">
+              <p>
+                Isto acontece maioritariamente por <strong>duas razões cruciais</strong> que todos os programadores enfrentam:
+              </p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>
+                  <strong>Carregar o Código Errado (Upload do ZIP Cru):</strong> Se descarregou o ZIP das fontes e copiou os ficheiros originais, o navegador fica sem saber o que fazer. O navegador dos computadores normais não lê TypeScript (.tsx) ou React puro diretamente! É 100% obrigatório correr o comando <code>npm run build</code> localmente ou no servidor e carregar <strong>exclusivamente a pasta gerada chamada <code>dist/</code></strong>.
+                </li>
+                <li>
+                  <strong>Problema das Rotas Absolutas (Resolvido!):</strong> Por defeito, os sites Vite procuravam recursos na raiz absoluta (<code>/</code>). Se o seu repositório do GitHub Pages chama-se <code>meu-site</code>, o navegador tentava carregar os ficheiros no domínio mãe e falhava. <strong>Atualizámos agora o ficheiro de configuração (<code>vite.config.ts</code>) com <code>base: "./"</code> para garantir que todos os links agora são interpretados de forma relativa e já funciona de fábrica em qualquer plataforma!</strong>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         {/* Platform Selector buttons to choose detailed guide */}
         <div className="border border-slate-200/80 p-1.5 rounded-2xl flex flex-wrap justify-between gap-1.5 bg-slate-100 max-w-3xl mx-auto mb-8 font-sans">
           <button
