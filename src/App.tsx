@@ -24,8 +24,8 @@ export default function App() {
       {/* Header Navigation with Tab Triggers */}
       <nav className="max-w-6xl mx-auto px-4 md:px-8 mt-6">
         <div className="flex flex-col gap-4 p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
-          {/* Brand & Action Button Row */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          {/* Brand Row without the redundant button */}
+          <div className="flex items-center justify-start pb-4 border-b border-slate-100">
             <div className="flex items-center space-x-2.5">
               <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-xs shrink-0">
                 <span className="text-white font-bold text-xl font-display">G</span>
@@ -36,55 +36,48 @@ export default function App() {
                 </span>
               </div>
             </div>
-
-            <button 
-              onClick={() => setActiveTab('playground')}
-              className="px-5 py-2.5 bg-slate-950 hover:bg-slate-850 text-white rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-xs shrink-0"
-            >
-              Banco de Prompts
-            </button>
           </div>
 
-          {/* Navigation Tab Selection (Fully spacious, centering beautifully) */}
-          <div className="flex flex-wrap items-center justify-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200/60 font-sans w-full">
+          {/* Navigation Tab Selection (100% unified in a single row with modern scroll fallback) */}
+          <div className="flex flex-row flex-nowrap items-center md:justify-center gap-1 md:gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200/60 font-sans w-full overflow-x-auto scrollbar-none">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'overview' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
+              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'overview' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Home className="w-3.5 h-3.5 shrink-0" />
               <span>Início</span>
             </button>
             <button
               onClick={() => setActiveTab('console')}
-              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'console' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
+              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'console' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Compass className="w-3.5 h-3.5 shrink-0" />
               <span>Descodificador da Consola</span>
             </button>
             <button
               onClick={() => setActiveTab('models')}
-              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'models' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
+              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'models' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Sliders className="w-3.5 h-3.5 shrink-0" />
               <span>Modelos & Chaves API</span>
             </button>
             <button
               onClick={() => setActiveTab('playground')}
-              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
+              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Lightbulb className="w-3.5 h-3.5 shrink-0" />
               <span>Banco de Prompts</span>
             </button>
             <button
               onClick={() => setActiveTab('publishing')}
-              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'publishing' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
+              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'publishing' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Globe className="w-3.5 h-3.5 shrink-0" />
               <span>Como Publicar</span>
             </button>
             <button
               onClick={() => setActiveTab('tutorials')}
-              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'tutorials' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
+              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'tutorials' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <BookOpen className="w-3.5 h-3.5 shrink-0" />
               <span>Tutoriais & Prática</span>

@@ -12,6 +12,15 @@ body {
   background-color: #f8fafc; /* Slate 50 */
 }
 
+/* Hide scrollbar but keep functionality */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 h1, h2, h3, h4 {
   font-family: var(--font-display);
 }
