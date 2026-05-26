@@ -256,7 +256,7 @@ Estruture as tuas opções em Markdown de forma muito clara para que o professor
 
 export default function AIPlanner() {
   const [activeCategory, setActiveCategory] = useState<string>("planner");
-  const [guideTab, setGuideTab] = useState<"menu" | "header" | "cards">("menu");
+  const [guideTab, setGuideTab] = useState<"menu" | "header" | "cards" | "tools">("menu");
   const [inputs, setInputs] = useState<Record<string, string>>(() => {
     // Inicializar os estados do formulário com os valores de defeito de cada categoria para rapidez absoluta
     const initialInputs: Record<string, string> = {};
@@ -378,6 +378,17 @@ export default function AIPlanner() {
             >
               Painel Central & Exploração
             </button>
+            <button
+              id="guide-tab-tools"
+              onClick={() => setGuideTab('tools')}
+              className={`px-3 py-1.5 rounded-lg text-[10px] whitespace-nowrap font-extrabold transition-all cursor-pointer ${
+                guideTab === 'tools' 
+                  ? "bg-amber-100 text-amber-900 shadow-3xs border border-amber-200" 
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              🛠️ Ferramentas & IA (Novo)
+            </button>
           </div>
         </div>
 
@@ -449,6 +460,56 @@ export default function AIPlanner() {
                 <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Sinalizador de Limites</h5>
                 <p className="text-[10px] text-slate-600 leading-relaxed">
                   Localizado na parte inferior esquerda. Serve para docentes ou instituições que necessitam de migrar para os planos empresariais da Google Cloud para obter maiores taxas de pedidos com modelos Pro.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-white rounded-2xl border border-slate-200/80 shadow-3xs space-y-1.5 text-left">
+                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-indigo-50 text-indigo-700 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  🔍 Search
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Pesquisa de Prompts</h5>
+                <p className="text-[10px] text-slate-600 leading-relaxed">
+                  Permite pesquisar rapidamente em toda a sua biblioteca de prompts guardados e conversas de testes guardadas anteriormente, poupando imenso tempo de organização.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-white rounded-2xl border border-slate-200/80 shadow-3xs space-y-1.5 text-left">
+                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-indigo-50 text-indigo-700 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  🔔 What's new
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Novidades da Google</h5>
+                <p className="text-[10px] text-slate-600 leading-relaxed">
+                  Atalho com ícone de sino que abre o feed com as últimas atualizações, modificações de modelos da Google e correções de segurança aplicadas à plataforma.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-white rounded-2xl border border-slate-200/80 shadow-3xs space-y-1.5 text-left border-amber-300 bg-amber-50/20">
+                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-100 text-amber-800 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  🔑 Get API key
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Obter Chave API</h5>
+                <p className="text-[10px] text-slate-600 leading-relaxed">
+                  <strong>Crucial!</strong> Aqui gera a sua chave alfanumérica secreta e pessoal para integrar a inteligência do Gemini em ferramentas parceiras ou projetos escolares próprios externos de forma oficial.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-white rounded-2xl border border-slate-200/80 shadow-3xs space-y-1.5 text-left">
+                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-indigo-50 text-indigo-700 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  ⚙️ Settings
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Definições Gerais</h5>
+                <p className="text-[10px] text-slate-600 leading-relaxed">
+                  Espaço para definir permissões de privacidade, quotas recomendadas, preferências de layout escuro/claro e gerir as entidades vinculadas de faturamento e equipas.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-white rounded-2xl border border-slate-200/80 shadow-3xs space-y-1.5 text-left">
+                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-indigo-50 text-indigo-700 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  👤 Conta Ativa (aluno123educa...)
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Perfil de Sessão</h5>
+                <p className="text-[10px] text-slate-600 leading-relaxed">
+                  No rodapé inferior esquerdo, mostra o e-mail de acesso ativo (como o seu e-mail pessoal de testes). Permite fazer Logout ou alternar a conta principal instantaneamente.
                 </p>
               </div>
             </motion.div>
@@ -601,6 +662,77 @@ export default function AIPlanner() {
                 <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Criar Livremente</h5>
                 <p className="text-[10px] text-slate-600 leading-relaxed">
                   Atalho ou rodapé central para saltar os caminhos guiados e iniciar logo a programação manual de um prompt vazio para modelações personalizadas de texto.
+                </p>
+              </div>
+            </motion.div>
+          )}
+
+          {guideTab === 'tools' && (
+            <motion.div
+              key="tools-guide"
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.15 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"
+            >
+              <div className="p-3.5 bg-amber-50/10 rounded-2xl border border-amber-200 shadow-3xs space-y-1.5 text-left border-l-4 border-l-amber-500">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-amber-100 text-amber-900 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  <span>📄 Structured outputs</span>
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Saídas Estruturadas (JSON)</h5>
+                <p className="text-[10px] text-slate-650 leading-relaxed">
+                  Garante que o Gemini responda exatamente em formatos lógicos fechados (como JSON). Perfeito para retirar do ar qualquer resposta informal ou prolixa da IA, gerando tabelas ou exercícios perfeitamente organizados para copiar.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-amber-50/10 rounded-2xl border border-amber-200 shadow-3xs space-y-1.5 text-left border-l-4 border-l-amber-500">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-amber-100 text-amber-900 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  <span>💻 Code execution</span>
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Execução Interna de Código</h5>
+                <p className="text-[10px] text-slate-650 leading-relaxed">
+                  Dá autonomia à IA para escrever de forma invisível código Python, compilá-lo, processá-lo e correr contas Matemáticas avançadas ou manipulações de textos infalivelmente, sem errar em contas elementares.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-amber-50/10 rounded-2xl border border-amber-200 shadow-3xs space-y-1.5 text-left border-l-4 border-l-amber-500">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-amber-100 text-amber-900 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  <span>⚙️ Function calling</span>
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Chamada de Funções Externas</h5>
+                <p className="text-[10px] text-slate-650 leading-relaxed">
+                  Conecta o chat de inteligência artificial a sistemas lógicos programados por si. A IA deteta de forma inteligente quando deve consultar bancos de dados escolares ou acionar automações programadas.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-amber-50/10 rounded-2xl border border-amber-200 shadow-3xs space-y-1.5 text-left border-l-4 border-l-indigo-600">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-indigo-550/15 text-indigo-700 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  <span>🌐 Grounding with Google Search</span>
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Pesquisa Ativa no Google</h5>
+                <p className="text-[10px] text-slate-650 leading-relaxed">
+                  Liga o modelo à internet atual em tempo real! Perfeito para o professor certificar factos históricos, verificar novidades didáticas e evitar qualquer tipo de alucinação de factos da IA.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-amber-50/10 rounded-2xl border border-amber-200 shadow-3xs space-y-1.5 text-left border-l-4 border-l-indigo-600">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-indigo-550/15 text-indigo-700 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  <span>📍 Grounding with Google Maps</span>
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Ancoragem Local Maps</h5>
+                <p className="text-[10px] text-slate-650 leading-relaxed">
+                  Permite enriquecer dados geográficos escolares e localização de pontos didáticos reais mapeando coordenadas e locais com suporte de alta fidelidade da Google Maps Platform.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-amber-50/10 rounded-2xl border border-amber-200 shadow-3xs space-y-1.5 text-left border-l-4 border-l-indigo-600">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-indigo-550/15 text-indigo-700 text-[9px] font-extrabold rounded-full uppercase tracking-wider">
+                  <span>🔗 URL context</span>
+                </div>
+                <h5 className="text-[11px] font-bold text-slate-900 uppercase tracking-wider leading-none">Análise de Endereço Web</h5>
+                <p className="text-[10px] text-slate-650 leading-relaxed">
+                  Introduza diretamente links de portais educacionais, artigos online ou recursos virtuais. O Gemini analisa as informações desse endereço dinonicamente e usa-as como base direta escolar para gerar os outputs.
                 </p>
               </div>
             </motion.div>
