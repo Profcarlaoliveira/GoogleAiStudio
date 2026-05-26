@@ -40,7 +40,7 @@ export default function App() {
               onClick={() => setActiveTab('playground')}
               className="px-5 py-2.5 bg-slate-950 hover:bg-slate-850 text-white rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-xs shrink-0"
             >
-              Abrir Gerador IA
+              Banco de Prompts
             </button>
           </div>
 
@@ -65,7 +65,7 @@ export default function App() {
               className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Lightbulb className="w-3.5 h-3.5 shrink-0" />
-              <span>Playground IA</span>
+              <span>Prompts AI Studio</span>
             </button>
             <button
               onClick={() => setActiveTab('publishing')}
@@ -126,14 +126,14 @@ export default function App() {
                 {/* Visual wizard guide helper */}
                 <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
                   <div className="text-left">
-                    <h4 className="font-bold text-slate-900 text-sm">Pronto para testar a Inteligência Artificial diretamente?</h4>
-                    <p className="text-xs text-slate-500 mt-0.5">Utilize o nosso Playground de testes interativos para criar planos de aula, rubricas e atividades escolares.</p>
+                    <h4 className="font-bold text-slate-900 text-sm">Pronto para acelerar o seu trabalho no Google AI Studio?</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Utilize o nosso Banco de Prompts Inteligentes e Otimizados para criar de forma lúdica planos de aula inovadores, rubricas e atividades práticas.</p>
                   </div>
                   <button
                     onClick={() => setActiveTab('playground')}
                     className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center"
                   >
-                    <span>Seguinte: Playground IA</span>
+                    <span>Seguinte: Prompts AI Studio</span>
                     <Lightbulb className="w-4 h-4" />
                   </button>
                 </div>
