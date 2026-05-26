@@ -330,8 +330,8 @@ export default function AIPlanner() {
         </div>
       </div>
 
-      {/* Interactive Visual Decode of Google AI Studio Interface */}
-      <div className="bg-slate-50 border border-slate-200 rounded-3xl p-5 md:p-6 space-y-4">
+      {/* Interactive Visual Decode of Google AI Studio Interface (Upgrade moved to dedicated ConsoleExplorer tab) */}
+      <div className="hidden bg-slate-50 border border-slate-200 rounded-3xl p-5 md:p-6 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-4">
           <div className="space-y-1">
             <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5 font-display">

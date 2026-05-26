@@ -2,15 +2,16 @@ import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import BuildVsCode from "./components/BuildVsCode";
 import StudioExplorer from "./components/StudioExplorer";
+import ConsoleExplorer from "./components/ConsoleExplorer";
 import AIPlanner from "./components/AIPlanner";
 import Integrations from "./components/Integrations";
 import PracticalTutorial from "./components/PracticalTutorial";
 import PublishingGuide from "./components/PublishingGuide";
-import { BookOpen, Sparkles, LayoutGrid, Award, ShieldAlert, GraduationCap, Cpu, Home, Compass, Lightbulb, Globe } from "lucide-react";
+import { BookOpen, Sparkles, LayoutGrid, Award, ShieldAlert, GraduationCap, Cpu, Home, Compass, Lightbulb, Globe, Sliders } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
-  const [activeTab, setActiveTab ] = useState<'overview' | 'explorer' | 'playground' | 'publishing' | 'tutorials'>('overview');
+  const [activeTab, setActiveTab ] = useState<'overview' | 'console' | 'models' | 'playground' | 'publishing' | 'tutorials'>('overview');
 
   // Smoothly scroll back to the top on page/tab changes for absolute comfort
   useEffect(() => {
@@ -54,18 +55,25 @@ export default function App() {
               <span>Início</span>
             </button>
             <button
-              onClick={() => setActiveTab('explorer')}
-              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'explorer' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
+              onClick={() => setActiveTab('console')}
+              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'console' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Compass className="w-3.5 h-3.5 shrink-0" />
-              <span>Manual do Estúdio</span>
+              <span>Descodificador da Consola</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('models')}
+              className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'models' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
+            >
+              <Sliders className="w-3.5 h-3.5 shrink-0" />
+              <span>Modelos & Chaves API</span>
             </button>
             <button
               onClick={() => setActiveTab('playground')}
               className={`flex items-center gap-1.5 py-2 px-3.5 md:px-4 rounded-lg text-xs font-bold transition-all uppercase tracking-wider grow md:grow-0 justify-center ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
             >
               <Lightbulb className="w-3.5 h-3.5 shrink-0" />
-              <span>Prompts AI Studio</span>
+              <span>Banco de Prompts</span>
             </button>
             <button
               onClick={() => setActiveTab('publishing')}
@@ -105,35 +113,56 @@ export default function App() {
                 {/* Visual wizard guide helper */}
                 <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
                   <div className="text-left">
-                    <h4 className="font-bold text-slate-900 text-sm">Gostaria de ver como estruturar chaves API ou publicar no Netlify/GitHub?</h4>
-                    <p className="text-xs text-slate-500 mt-0.5">Visite o manual detalhado para entender as mecânicas de compilação e alojamento.</p>
+                    <h4 className="font-bold text-slate-900 text-sm">Gostaria de ver como navegar nos menus e ativas as ferramentas de IA?</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Visite o descodificador interativo para ver em tempo real o potencial de cada botão da consola.</p>
                   </div>
                   <button
-                    onClick={() => setActiveTab('explorer')}
-                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center"
+                    onClick={() => setActiveTab('console')}
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center cursor-pointer"
                   >
-                    <span>Seguinte: Manual do Estúdio</span>
+                    <span>Seguinte: Descodificador da Consola</span>
                     <Compass className="w-4 h-4" />
                   </button>
                 </div>
               </div>
             )}
 
-            {activeTab === 'explorer' && (
+            {activeTab === 'console' && (
+              <div className="space-y-6">
+                <ConsoleExplorer />
+                
+                {/* Visual wizard guide helper */}
+                <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
+                  <div className="text-left">
+                    <h4 className="font-bold text-slate-900 text-sm">Pronto para selecionar o seu modelo de IA e gerar a sua chave API gratuita?</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Veja a comparação entre Gemini Flash e Pro e conselhos técnicos de segurança.</p>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab('models')}
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center cursor-pointer"
+                  >
+                    <span>Seguinte: Modelos & Chaves API</span>
+                    <Sliders className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'models' && (
               <div className="space-y-6">
                 <StudioExplorer />
                 
                 {/* Visual wizard guide helper */}
                 <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
                   <div className="text-left">
-                    <h4 className="font-bold text-slate-900 text-sm">Pronto para acelerar o seu trabalho no Google AI Studio?</h4>
-                    <p className="text-xs text-slate-500 mt-0.5">Utilize o nosso Banco de Prompts Inteligentes e Otimizados para criar de forma lúdica planos de aula inovadores, rubricas e atividades práticas.</p>
+                    <h4 className="font-bold text-slate-900 text-sm">Pronto para criar planos de aula e exercícios otimizados para a consola?</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Aceda ao Banco de Prompts Dinâmicos projetados estruturalmente para professores.</p>
                   </div>
                   <button
                     onClick={() => setActiveTab('playground')}
-                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center"
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center cursor-pointer"
                   >
-                    <span>Seguinte: Prompts AI Studio</span>
+                    <span>Seguinte: Banco de Prompts</span>
                     <Lightbulb className="w-4 h-4" />
                   </button>
                 </div>
@@ -152,7 +181,7 @@ export default function App() {
                   </div>
                   <button
                     onClick={() => setActiveTab('publishing')}
-                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center"
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center cursor-pointer"
                   >
                     <span>Seguinte: Como Publicar</span>
                     <Globe className="w-4 h-4" />
@@ -173,7 +202,7 @@ export default function App() {
                   </div>
                   <button
                     onClick={() => setActiveTab('tutorials')}
-                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center"
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center cursor-pointer"
                   >
                     <span>Seguinte: Tutoriais & Prática</span>
                     <BookOpen className="w-4 h-4" />
