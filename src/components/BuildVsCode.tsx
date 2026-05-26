@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Code, Layout, ArrowRight, CheckCircle2, Terminal, PlayCircle, Laptop, Sparkles, HelpCircle } from "lucide-react";
+import { Code, Layout, ArrowRight, CheckCircle2, Terminal, PlayCircle, Laptop, Sparkles, HelpCircle, Copy, Check } from "lucide-react";
 
 export default function BuildVsCode() {
   const [activeTab, setActiveTab] = useState<'both' | 'build' | 'code'>('both');
   const [testScenario, setTestScenario] = useState<string>('');
   const [scenarioAnswer, setScenarioAnswer] = useState<string>('');
+  const [copied, setCopied] = useState<boolean>(false);
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const scenarios = [
     {
@@ -27,12 +34,81 @@ export default function BuildVsCode() {
       question: "Quero disponibilizar um assistente digital no meu website de turma para ajudar os alunos a esclarecer dúvidas de história.",
       choice: "Build",
       reason: "O Build permite criar e ver de imediato a interface gráfica de conversação (chatbot). Pode pedir ao agente do Build para construir um chat com histórico, um visual temático medieval e barras de progresso."
+    },
+    {
+      question: "Quero carregar a planificação anual da minha disciplina em PDF (150 páginas) e pedir ideias de fichas de trabalho personalizadas.",
+      choice: "Code",
+      reason: "Porque o Code suporta uma imensa janela de contexto, permitindo carregar PDFs extensos no painel lateral de ficheiros e fazer testes interativos e sistemáticos do comportamento do prompt."
+    },
+    {
+      question: "Quero criar uma calculadora interativa onde o aluno insere a sua nota de testes e de trabalhos e recebe um gráfico estético com o seu progresso.",
+      choice: "Build",
+      reason: "Uma app com caixas numéricas e gráficos interativos é perfeita para o modo Build. O assistente cria o design visual completo e interativo em meros segundos!"
+    },
+    {
+      question: "Quero afinar um modelo para responder estritamente no formato estruturado JSON com respostas de escolha múltipla para importar no Moodle.",
+      choice: "Code",
+      reason: "O Code tem uma opção dedicada na barra lateral para forçar o output do modelo no formato estruturado (Schema JSON), garantindo que nada falha ao importar no seu Moodle."
+    },
+    {
+      question: "Quero construir um gerador de guiões de laboratório com cronómetros e listas de segurança clicáveis para as aulas práticas de química.",
+      choice: "Build",
+      reason: "Trata-se de um utilitário prático com componentes táteis e interativos (cronómetro, checklist). O Build resolve isto de imediato com um layout reativo limpo."
     }
   ];
 
   const handleScenarioCheck = (scen: typeof scenarios[0]) => {
     setTestScenario(scen.question);
     setScenarioAnswer(`A opção ideal é o **Começar com ${scen.choice}**! \n\n**Porquê?** ${scen.reason}`);
+  };
+
+  // State for Custom Interactive Questionnaire
+  const [goal, setGoal] = useState<string>('');
+  const [fileType, setFileType] = useState<string>('');
+  const [targetUser, setTargetUser] = useState<string>('');
+  const [customRecommendation, setCustomRecommendation] = useState<{
+    mode: string;
+    description: string;
+    tips: string[];
+    samplePrompt: string;
+  } | null>(null);
+
+  const calculateCustomRecommendation = (g: string, f: string, t: string) => {
+    if (!g || !f || !t) return;
+
+    let mode = '';
+    let description = '';
+    let tips: string[] = [];
+    let samplePrompt = '';
+
+    if (g === 'interactive' || t === 'students') {
+      mode = 'Modo BUILD (Interface de App)';
+      description = 'O seu objetivo principal necessita de uma interface gráfica amigável, botões clicáveis, ou destina-se a ser partilhado diretamente com os alunos. O modo Build simplifica tudo, desenhando os ecrãs e fluxos visuais prontos a usar.';
+      tips = [
+        'Descreva detalhadamente como quer que os botões se comportem.',
+        'Se pretender, use a integração com Netlify descrita no separador "Como Publicar" para obter um website eterno gratuito.',
+        'Peça ao assistente para criar temas claros, escuros ou cartões didáticos dinâmicos para tornar as aulas mais apelativas.'
+      ];
+      samplePrompt = `Cria um simulador interativo para aulas de Ciências Naturais de 8.º ano sobre "Sistema Solar". Quero um ecrã com uma simulação visual em que os planetas rodem em redor do Sol, um botão para controlar a velocidade da órbita e um questionário dinâmico de 3 perguntas rápidas com feedback imediato para os alunos.`;
+    } else {
+      mode = 'Modo CODE (Foco no Modelo & API)';
+      description = 'O seu propósito envolve forte processamento pedagógico sob diretrizes exatas, uso de materiais complexos como PDFs escolares, ou necessita de códigos de exportação limpos. O modo Code na consola tradicional dar-lhe-á a precisão necessária.';
+      tips = [
+        'Use as Instruções de Sistema (System Instructions) para ditar as regras éticas e o tom de voz pedagógico do modelo.',
+        'Configure a Temperatura baixa (e.g., 0.2 a 0.4) para obter avaliações rigorosas ou alta (e.g., 0.8 a 1.0) para gerar ideias de aula criativas.',
+        'Selecione o modelo Gemini Pro caso queira processar redações longas e materiais escolares complexos e pesados.'
+      ];
+      samplePrompt = `Atua como avaliador pedagógico e mentor científico para relatórios de laboratório de Física de 11.º ano. Analisa o PDF de planificação e o trabalho enviado pelo aluno e extrai uma análise estruturada contendo:\n1) Resumo da experiência\n2) Identificação de desvios experimentais mais comuns\n3) Um parágrafo de feedback formativo construtivo e positivo para incentivar o aluno.`;
+    }
+
+    setCustomRecommendation({ mode, description, tips, samplePrompt });
+  };
+
+  const resetCustomForm = () => {
+    setGoal('');
+    setFileType('');
+    setTargetUser('');
+    setCustomRecommendation(null);
   };
 
   return (
@@ -48,7 +124,7 @@ export default function BuildVsCode() {
             Iniciar por &quot;Build&quot; ou por &quot;Code&quot;?
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto text-sm">
-            Ao aceder ao Google AI Studio, depara-se com duas formas fundamentais de interagir com o Gemini. Ambas aproveitam a inteligência do modelo, mas destinam-se a fins e perfis inteiramente diferentes. Compreender as suas diferenças é a chave para o sucesso do seu projeto.
+            Ao aceder ao Google AI Studio, depara-se com duas formas fundamentais de interagir com o Gemini. Ambas aproveitam a inteligência do modelo, mas destinam-se a fins e perfis inteiramente diferentes.
           </p>
         </div>
 
@@ -270,8 +346,164 @@ export default function BuildVsCode() {
                 <div className="text-sm font-semibold text-emerald-700 flex items-center gap-1.5 mb-2">
                   <PlayCircle className="w-4 h-4" /> Recomendação da IA:
                 </div>
-                <div className="text-sm text-slate-700 whitespace-pre-line leading-relaxed">
+                <div className="text-sm text-slate-700 whitespace-pre-line leading-relaxed pb-1">
                   {scenarioAnswer}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Dynamic Custom Questionnaire */}
+        <div className="mt-8 p-6 bg-slate-100/40 rounded-2xl border border-slate-200/60 font-sans">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-5 h-5 text-blue-600" />
+            <h4 className="text-base font-bold text-slate-900">Gerador de Decisão Dinâmico Personalizado</h4>
+          </div>
+          <p className="text-xs text-slate-500 mb-6 leading-relaxed">
+            Não encontrou o seu caso exato acima? Responda a 3 perguntas simples sobre o seu objetivo pedagógico real para ver de imediato qual o modo e os parâmetros seguros de que precisa em Google AI Studio:
+          </p>
+
+          <div className="space-y-5">
+            {/* Question 1: Goal */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2 select-none">
+                1. Qual é o formato final pretendido para a atividade?
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setGoal('interactive'); calculateCustomRecommendation('interactive', fileType, targetUser); }}
+                  className={`p-3 text-left rounded-xl text-xs border transition-all cursor-pointer ${goal === 'interactive' ? 'bg-blue-600 text-white border-blue-600 font-medium' : 'bg-white border-slate-200 text-slate-700 hover:border-slate-350'}`}
+                >
+                  <strong className="block mb-1">Visual & Interativo (App)</strong>
+                  Quero botões, caixas de entrada numéricas, gráficos, barras de progresso ou cronómetros clicáveis para interação autónoma.
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setGoal('backend'); calculateCustomRecommendation('backend', fileType, targetUser); }}
+                  className={`p-3 text-left rounded-xl text-xs border transition-all cursor-pointer ${goal === 'backend' ? 'bg-blue-600 text-white border-blue-600 font-medium' : 'bg-white border-slate-200 text-slate-700 hover:border-slate-350'}`}
+                >
+                  <strong className="block mb-1">Lógica, Automação ou Escrita</strong>
+                  Quero processar PDFs complexos, grelhas de critérios, analisar redações anonimizadas ou extrair scripts para o Moodle.
+                </button>
+              </div>
+            </div>
+
+            {/* Question 2: Files */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2 select-none">
+                2. Vai carregar manuais ou ficheiros letivos muito extensos?
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setFileType('large'); calculateCustomRecommendation(goal, 'large', targetUser); }}
+                  className={`p-3 text-left rounded-xl text-xs border transition-all cursor-pointer ${fileType === 'large' ? 'bg-blue-600 text-white border-blue-600 font-medium' : 'bg-white border-slate-200 text-slate-700 hover:border-slate-350'}`}
+                >
+                  <strong className="block mb-1">Sim, de grande volume (PDFs, Livros)</strong>
+                  Preciso que o modelo consulte regulamentos, planificações anuais detalhadas ou exames nacionais de apoio.
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setFileType('simple'); calculateCustomRecommendation(goal, 'simple', targetUser); }}
+                  className={`p-3 text-left rounded-xl text-xs border transition-all cursor-pointer ${fileType === 'simple' ? 'bg-blue-600 text-white border-blue-600 font-medium' : 'bg-white border-slate-200 text-slate-700 hover:border-slate-350'}`}
+                >
+                  <strong className="block mb-1">Não / Textos Curtos ou Prompts Diretos</strong>
+                  Apenas pretendo produzir exercícios, corrigir pequenos enunciados ou gerar dinâmicas rápidas de brainstorming de aula.
+                </button>
+              </div>
+            </div>
+
+            {/* Question 3: Audience */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2 select-none">
+                3. Quem usará diretamente o produto gerado na escola?
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setTargetUser('students'); calculateCustomRecommendation(goal, fileType, 'students'); }}
+                  className={`p-3 text-left rounded-xl text-xs border transition-all cursor-pointer ${targetUser === 'students' ? 'bg-blue-600 text-white border-blue-600 font-medium' : 'bg-white border-slate-200 text-slate-700 hover:border-slate-350'}`}
+                >
+                  <strong className="block mb-1">Estudantes / Turmas</strong>
+                  Eles vão manipular a ferramenta de estudo diretamente durante as aulas ou em casa para auto-estudo.
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setTargetUser('teacher_or_system'); calculateCustomRecommendation(goal, fileType, 'teacher_or_system'); }}
+                  className={`p-3 text-left rounded-xl text-xs border transition-all cursor-pointer ${targetUser === 'teacher_or_system' ? 'bg-blue-600 text-white border-blue-600 font-medium' : 'bg-white border-slate-200 text-slate-700 hover:border-slate-350'}`}
+                >
+                  <strong className="block mb-1">Eu (Professor) ou Scripts Automatizados</strong>
+                  O meu foco é otimizar tempo, analisar resoluções anonimizadas ou programar pequenos scripts locais.
+                </button>
+              </div>
+            </div>
+
+            {/* Reset Form Button */}
+            {(goal || fileType || targetUser) && (
+              <div className="pt-2 text-right">
+                <button
+                  onClick={resetCustomForm}
+                  className="text-xs text-red-600 hover:text-red-700 font-bold uppercase tracking-wider cursor-pointer"
+                >
+                  Limpar Respostas
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Results Output Block */}
+          <AnimatePresence mode="wait">
+            {customRecommendation && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mt-6 p-5 bg-white border border-blue-200 rounded-2xl shadow-xs"
+              >
+                <div className="text-xs font-bold uppercase tracking-widest text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md inline-block mb-3">
+                  🚀 Recomendação Atribuída: {customRecommendation.mode}
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  {customRecommendation.description}
+                </p>
+                <div className="space-y-2 border-t border-slate-100 pt-3">
+                  <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">
+                    Dicas Práticas & Segurança para Professores:
+                  </span>
+                  {customRecommendation.tips.map((tip, idx) => (
+                    <div key={idx} className="flex items-start gap-1.5 text-xs text-slate-700 leading-relaxed">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 mt-0.5 shrink-0" />
+                      <span>{tip}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Styled Prompt Example with Copy Utility */}
+                <div className="mt-4 border-t border-slate-100 pt-4">
+                  <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-2">
+                    💡 Exemplo de Prompt Recomendado (Copie e use no Google AI Studio):
+                  </span>
+                  <div className="relative p-4 bg-slate-50 border border-slate-205 rounded-xl text-slate-700 leading-relaxed pr-12 select-text whitespace-pre-line font-sans text-xs">
+                    <p className="italic text-slate-800">{customRecommendation.samplePrompt}</p>
+                    <button
+                      onClick={() => copyToClipboard(customRecommendation.samplePrompt)}
+                      title="Copiar prompt"
+                      className="absolute top-3 right-3 p-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-500 hover:text-slate-850 transition-all cursor-pointer shadow-3xs flex items-center justify-center shrink-0"
+                    >
+                      {copied ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                    {copied && (
+                      <span className="absolute bottom-3 right-3 text-[9px] font-bold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 leading-none">
+                        Copiado!
+                      </span>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             )}

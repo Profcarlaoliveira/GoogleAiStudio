@@ -40,7 +40,9 @@ export default function Header() {
           transition={{ delay: 0.2 }}
           className="text-base md:text-lg text-slate-600 max-w-3xl leading-relaxed mb-8"
         >
-          O Google AI Studio é a plataforma oficial da Google para experimentar, configurar e integrar a inteligência artificial do Gemini em múltiplos contextos. Este guia foi concebido para ajudar a compreender cada funcionalidade do estúdio, os modos de prototipagem, as chaves API de segurança, os princípios éticos e o passo a passo para colocar as suas criações online na plataforma Netlify.
+          O Google AI Studio é a plataforma oficial da Google que permite explorar, configurar e integrar a inteligência artificial do Gemini em diferentes contextos.
+          <br /><br />
+          Este guia foi concebido para o ajudar a compreender, de forma clara, as principais funcionalidades da plataforma, incluindo os modos de prototipagem, a gestão segura de chaves de API e os passos essenciais para colocar as suas criações online.
         </motion.p>
 
         {/* Quick Stats/Insights Grid */}
