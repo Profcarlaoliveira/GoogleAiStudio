@@ -11,6 +11,7 @@ export default defineConfig(() => {
   const chaveKeyValue = process.env.ChaveKey || process.env.VITE_GEMINI_API_KEY || '';
   
   return {
+    base: './',
     plugins: [react(), tailwindcss()],
     envPrefix: ['VITE_', 'ChaveKey', 'CHAVE_KEY'],
     define: {
