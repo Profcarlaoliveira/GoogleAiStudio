@@ -53,7 +53,7 @@ export default function App() {
               <button
                 id="tab-btn-overview"
                 onClick={() => setActiveTab('overview')}
-                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'overview' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+                className={`flex items-center gap-1.5 py-1 px-1.5 md:px-2.5 lg:px-3 rounded-lg text-[8px] min-[370px]:text-[8.5px] min-[410px]:text-[9.5px] md:text-[10px] lg:text-[11px] font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'overview' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
               >
                 <Home className="w-3.5 h-3.5 shrink-0" />
                 <span>Início</span>
@@ -61,15 +61,15 @@ export default function App() {
               <button
                 id="tab-btn-simulator"
                 onClick={() => setActiveTab('simulator')}
-                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'simulator' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+                className={`flex items-center gap-1.5 py-1 px-1.5 md:px-2.5 lg:px-3 rounded-lg text-[8px] min-[370px]:text-[8.5px] min-[410px]:text-[9.5px] md:text-[10px] lg:text-[11px] font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'simulator' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
               >
                 <Sparkles className="w-3.5 h-3.5 shrink-0 text-amber-500" />
-                <span>Simulador de Decisão</span>
+                <span>Como Começar</span>
               </button>
               <button
                 id="tab-btn-console"
                 onClick={() => setActiveTab('console')}
-                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'console' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+                className={`flex items-center gap-1.5 py-1 px-1.5 md:px-2.5 lg:px-3 rounded-lg text-[8px] min-[370px]:text-[8.5px] min-[410px]:text-[9.5px] md:text-[10px] lg:text-[11px] font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'console' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
               >
                 <Compass className="w-3.5 h-3.5 shrink-0" />
                 <span>Descodificador</span>
@@ -77,7 +77,7 @@ export default function App() {
               <button
                 id="tab-btn-models"
                 onClick={() => setActiveTab('models')}
-                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'models' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+                className={`flex items-center gap-1.5 py-1 px-1.5 md:px-2.5 lg:px-3 rounded-lg text-[8px] min-[370px]:text-[8.5px] min-[410px]:text-[9.5px] md:text-[10px] lg:text-[11px] font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'models' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
               >
                 <Sliders className="w-3.5 h-3.5 shrink-0" />
                 <span>Modelos & Chaves</span>
@@ -85,7 +85,7 @@ export default function App() {
               <button
                 id="tab-btn-playground"
                 onClick={() => setActiveTab('playground')}
-                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+                className={`flex items-center gap-1.5 py-1 px-1.5 md:px-2.5 lg:px-3 rounded-lg text-[8px] min-[370px]:text-[8.5px] min-[410px]:text-[9.5px] md:text-[10px] lg:text-[11px] font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
               >
                 <Lightbulb className="w-3.5 h-3.5 shrink-0" />
                 <span>Banco de Prompts</span>
@@ -93,7 +93,7 @@ export default function App() {
               <button
                 id="tab-btn-publishing"
                 onClick={() => setActiveTab('publishing')}
-                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'publishing' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+                className={`flex items-center gap-1.5 py-1 px-1.5 md:px-2.5 lg:px-3 rounded-lg text-[8px] min-[370px]:text-[8.5px] min-[410px]:text-[9.5px] md:text-[10px] lg:text-[11px] font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'publishing' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
               >
                 <Globe className="w-3.5 h-3.5 shrink-0" />
                 <span>Como Publicar</span>
@@ -101,7 +101,7 @@ export default function App() {
               <button
                 id="tab-btn-tutorials"
                 onClick={() => setActiveTab('tutorials')}
-                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'tutorials' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+                className={`flex items-center gap-1.5 py-1 px-1.5 md:px-2.5 lg:px-3 rounded-lg text-[8px] min-[370px]:text-[8.5px] min-[410px]:text-[9.5px] md:text-[10px] lg:text-[11px] font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'tutorials' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
               >
                 <BookOpen className="w-3.5 h-3.5 shrink-0" />
                 <span>Tutoriais & Prática</span>
@@ -131,13 +131,13 @@ export default function App() {
                 <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
                   <div className="text-left">
                     <h4 className="font-bold text-slate-900 text-sm">Qual é o modo de IA ideal para o seu projeto letivo?</h4>
-                    <p className="text-xs text-slate-500 mt-0.5">Use o nosso Simulador de Decisão do Professor para ver recomendações pedagógicas, dicas de segurança e exemplos exatos de prompts prontos a usar.</p>
+                    <p className="text-xs text-slate-500 mt-0.5">Clique no nosso menu &quot;Como Começar&quot; para aceder ao simulador, ver recomendações pedagógicas, dicas de segurança e exemplos exatos de prompts prontos a usar.</p>
                   </div>
                   <button
                     onClick={() => setActiveTab('simulator')}
                     className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center cursor-pointer shrink-0 font-sans"
                   >
-                    <span>Seguinte: Simulador de Decisão</span>
+                    <span>Seguinte: Como Começar</span>
                     <Sparkles className="w-4 h-4 text-white" />
                   </button>
                 </div>
