@@ -11,7 +11,7 @@ import { BookOpen, Sparkles, LayoutGrid, Award, ShieldAlert, GraduationCap, Cpu,
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
-  const [activeTab, setActiveTab ] = useState<'overview' | 'console' | 'models' | 'playground' | 'publishing' | 'tutorials'>('overview');
+  const [activeTab, setActiveTab ] = useState<'overview' | 'simulator' | 'console' | 'models' | 'playground' | 'publishing' | 'tutorials'>('overview');
 
   // Smoothly scroll back to the top on page/tab changes for absolute comfort
   useEffect(() => {
@@ -57,6 +57,14 @@ export default function App() {
               >
                 <Home className="w-3.5 h-3.5 shrink-0" />
                 <span>Início</span>
+              </button>
+              <button
+                id="tab-btn-simulator"
+                onClick={() => setActiveTab('simulator')}
+                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'simulator' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+              >
+                <Sparkles className="w-3.5 h-3.5 shrink-0 text-amber-500" />
+                <span>Simulador de Decisão</span>
               </button>
               <button
                 id="tab-btn-console"
@@ -118,17 +126,37 @@ export default function App() {
             {activeTab === 'overview' && (
               <div className="space-y-6">
                 <Header />
+                
+                {/* Visual wizard guide helper */}
+                <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
+                  <div className="text-left">
+                    <h4 className="font-bold text-slate-900 text-sm">Qual é o modo de IA ideal para o seu projeto letivo?</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Use o nosso Simulador de Decisão do Professor para ver recomendações pedagógicas, dicas de segurança e exemplos exatos de prompts prontos a usar.</p>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab('simulator')}
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center cursor-pointer shrink-0 font-sans"
+                  >
+                    <span>Seguinte: Simulador de Decisão</span>
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'simulator' && (
+              <div className="space-y-6">
                 <BuildVsCode />
                 
                 {/* Visual wizard guide helper */}
                 <div className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xs mt-8 font-sans">
                   <div className="text-left">
-                    <h4 className="font-bold text-slate-900 text-sm">Gostaria de ver como navegar nos menus e ativas as ferramentas de IA?</h4>
+                    <h4 className="font-bold text-slate-900 text-sm">Gostaria de ver como navegar nos menus e ativar as ferramentas de IA?</h4>
                     <p className="text-xs text-slate-500 mt-0.5">Visite o descodificador interativo para ver em tempo real o potencial de cada botão da consola.</p>
                   </div>
                   <button
                     onClick={() => setActiveTab('console')}
-                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center cursor-pointer"
+                    className="flex items-center gap-1.5 bg-blue-600 hover:bg-slate-900 text-white font-bold text-xs py-2.5 px-5 rounded-xl transition-all self-stretch md:self-auto justify-center cursor-pointer shrink-0 font-sans"
                   >
                     <span>Seguinte: Descodificador da Consola</span>
                     <Compass className="w-4 h-4" />
