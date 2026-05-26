@@ -7,6 +7,17 @@ export default function BuildVsCode() {
   const [testScenario, setTestScenario] = useState<string>('');
   const [scenarioAnswer, setScenarioAnswer] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
+  const [copiedScenario, setCopiedScenario] = useState<boolean>(false);
+
+  // Define exact type for scen to avoid any implicity issues
+  interface ScenarioType {
+    question: string;
+    choice: string;
+    reason: string;
+    samplePrompt: string;
+  }
+
+  const [activeScenario, setActiveScenario] = useState<ScenarioType | null>(null);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -14,52 +25,67 @@ export default function BuildVsCode() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const scenarios = [
+  const copyScenarioToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedScenario(true);
+    setTimeout(() => setCopiedScenario(false), 2000);
+  };
+
+  const scenarios: ScenarioType[] = [
     {
       question: "Quero criar um simulador interativo de fotossíntese para os meus alunos usarem em computadores e telemóveis.",
       choice: "Build",
-      reason: "Porque quer uma aplicação web interativa e pronta a correr, onde os alunos possam clicar em botões e ver reações químicas animadas. O Build constrói todo o código de interface gráfica para si!"
+      reason: "Porque quer uma aplicação web interativa e pronta a correr, onde os alunos possam clicar em botões e ver reações químicas animadas. O Build constrói todo o código de interface gráfica para si!",
+      samplePrompt: "Cria um simulador interativo de fotossíntese para o 8.º ano. O ecrã deve mostrar uma planta, botões interativos para ligar/desligar a \"Luz Solar\", regular o nível de \"Água\" e o \"Dióxido de Carbono\", e uma barra animada que indica a produção de oxigénio e glicose em tempo real com explicações visuais."
     },
     {
       question: "Quero criar um script automatizado que lê 50 redações de alunos no Google Sheets e dá feedback detalhado com base numa grelha específica.",
       choice: "Code",
-      reason: "Porque precisa de automatizar um fluxo de dados. No Code, pode ajustar a 'Instrução do Sistema' com a sua grelha de avaliação, testar respostas e obter o código em Python para correr no seu Sheets ou Google Colab."
+      reason: "Porque precisa de automatizar um fluxo de dados. No Code, pode ajustar a 'Instrução do Sistema' com a sua grelha de avaliação, testar respostas e obter o código em Python para correr no seu Sheets ou Google Colab.",
+      samplePrompt: "Atua como corretor pedagógico e especialista escolar. Com base nos critérios recebidos, avalia a redação em anexo anonimizada (identificada apenas como Aluno A ou Redação 1) em três eixos: Gramática, Coesão e Argumentação. Fornece uma nota de 1 a 5 para cada eixo e um feedback formativo final construtivo e motivador."
     },
     {
       question: "Quero experimentar prompts para criar problemas de matemática inovadores e depois exportar o prompt para meter num portal da escola.",
       choice: "Code",
-      reason: "O Code é o playground perfeito para testar texto. Permite afinar variáveis como a 'Temperatura' (criatividade do modelo) e gerar códigos de API limpos em Node.js ou Javascript para integrar no portal."
+      reason: "O Code é o playground perfeito para testar texto. Permite afinar variáveis como a 'Temperatura' (criatividade do modelo) e gerar códigos de API limpos em Node.js ou Javascript para integrar no portal.",
+      samplePrompt: "Gera três problemas práticos de física/matemática baseados em desportos juvenis populares (como skate, surf ou parkour) para praticar equações quadráticas. Devolve as resoluções explicadas passo a passo e sugestões de pistas de ajuda."
     },
     {
       question: "Quero disponibilizar um assistente digital no meu website de turma para ajudar os alunos a esclarecer dúvidas de história.",
       choice: "Build",
-      reason: "O Build permite criar e ver de imediato a interface gráfica de conversação (chatbot). Pode pedir ao agente do Build para construir um chat com histórico, um visual temático medieval e barras de progresso."
+      reason: "O Build permite criar e ver de imediato a interface gráfica de conversação (chatbot). Pode pedir ao agente do Build para construir um chat com histórico, um visual temático medieval e barras de progresso.",
+      samplePrompt: "Cria um chatbot interactivo em que o utilizador conversa com o \"Escriba Amenhotep\" do Antigo Egito. O assistente deve responder de forma lúdica mas pedagogicamente rigorosa a questões do 7.º ano, incluindo botões para selecionar perguntas sugeridas e um contador de moedas ou pergaminhos encontrados."
     },
     {
       question: "Quero carregar a planificação anual da minha disciplina em PDF (150 páginas) e pedir ideias de fichas de trabalho personalizadas.",
       choice: "Code",
-      reason: "Porque o Code suporta uma imensa janela de contexto, permitindo carregar PDFs extensos no painel lateral de ficheiros e fazer testes interativos e sistemáticos do comportamento do prompt."
+      reason: "Porque o Code suporta uma imensa janela de contexto, permitindo carregar PDFs extensos no painel lateral de ficheiros e fazer testes interativos e sistemáticos do comportamento do prompt.",
+      samplePrompt: "Com base na planificação de ciências de 9.º ano carregada em anexo, elabora duas versões de uma ficha de avaliação sumativa rápida sobre o \"Sistema Cardiovascular\": uma versão Padrão e uma versão Adaptada com maior espaçamento, suportes visuais e enunciados mais curtos."
     },
     {
       question: "Quero criar uma calculadora interativa onde o aluno insere a sua nota de testes e de trabalhos e recebe um gráfico estético com o seu progresso.",
       choice: "Build",
-      reason: "Uma app com caixas numéricas e gráficos interativos é perfeita para o modo Build. O assistente cria o design visual completo e interativo em meros segundos!"
+      reason: "Uma app com caixas numéricas e gráficos interativos é perfeita para o modo Build. O assistente cria o design visual completo e interativo em meros segundos!",
+      samplePrompt: "Gera um simulador reativo em React onde o utilizador insere notas de 0 a 20 de três Testes (peso 70%) e um Trabalho Escrito (peso 30%). O ecrã calcula a média ponderada final ao vivo, gera um gráfico bonito ilustrando o progresso e mostra uma mensagem personalizada (congratulando ou sugerindo tópicos de estudo)."
     },
     {
       question: "Quero afinar um modelo para responder estritamente no formato estruturado JSON com respostas de escolha múltipla para importar no Moodle.",
       choice: "Code",
-      reason: "O Code tem uma opção dedicada na barra lateral para forçar o output do modelo no formato estruturado (Schema JSON), garantindo que nada falha ao importar no seu Moodle."
+      reason: "O Code tem uma opção dedicada na barra lateral para forçar o output do modelo no formato estruturado (Schema JSON), garantindo que nada falha ao importar no seu Moodle.",
+      samplePrompt: "Gera 5 perguntas de escolha múltipla de nível de 10.º ano sobre \"Fotossíntese vs Respiração Celular\". A tua resposta deve ser estritamente gerada sob a forma de um array de objetos JSON que obedeça aos campos: \"pergunta\", \"opcao_a\", \"opcao_b\", \"opcao_c\", \"opcao_d\", \"resposta_correta\", \"feedback_explicativo\"."
     },
     {
       question: "Quero construir um gerador de guiões de laboratório com cronómetros e listas de segurança clicáveis para as aulas práticas de química.",
       choice: "Build",
-      reason: "Trata-se de um utilitário prático com componentes táteis e interativos (cronómetro, checklist). O Build resolve isto de imediato com um layout reativo limpo."
+      reason: "Trata-se de um utilitário prático com componentes táteis e interativos (cronómetro, checklist). O Build resolve isto de imediato com um layout reativo limpo.",
+      samplePrompt: "Desenha uma aplicação web para suporte a aulas de laboratório de físico-química. O professor ou aluno deve poder escolher uma experiência rápida, ver uma lista interativa de verificação de segurança (Bata, Óculos, Luvas) e ter um ecrã passo a passo acompanhado por um cronómetro digital grande com botões de Iniciar, Pausar e Reiniciar."
     }
   ];
 
-  const handleScenarioCheck = (scen: typeof scenarios[0]) => {
+  const handleScenarioCheck = (scen: ScenarioType) => {
     setTestScenario(scen.question);
     setScenarioAnswer(`A opção ideal é o **Começar com ${scen.choice}**! \n\n**Porquê?** ${scen.reason}`);
+    setActiveScenario(scen);
   };
 
   // State for Custom Interactive Questionnaire
@@ -349,6 +375,33 @@ export default function BuildVsCode() {
                 <div className="text-sm text-slate-700 whitespace-pre-line leading-relaxed pb-1">
                   {scenarioAnswer}
                 </div>
+
+                {activeScenario && (
+                  <div className="mt-4 border-t border-slate-100 pt-4">
+                    <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-2">
+                      💡 Exemplo de Prompt Recomendado (Copie e use no Google AI Studio):
+                    </span>
+                    <div className="relative p-4 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 leading-relaxed pr-12 select-text whitespace-pre-line font-sans text-xs">
+                      <p className="italic text-slate-800">{activeScenario.samplePrompt}</p>
+                      <button
+                        onClick={() => copyScenarioToClipboard(activeScenario.samplePrompt)}
+                        title="Copiar prompt"
+                        className="absolute top-3 right-3 p-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-500 hover:text-slate-800 transition-all cursor-pointer shadow-3xs flex items-center justify-center shrink-0"
+                      >
+                        {copiedScenario ? (
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                      {copiedScenario && (
+                        <span className="absolute bottom-3 right-3 text-[9px] font-bold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 leading-none">
+                          Copiado!
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
