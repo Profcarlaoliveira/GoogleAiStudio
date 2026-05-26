@@ -22,66 +22,83 @@ export default function App() {
     <div id="main-container" className="min-h-screen bg-slate-50 text-slate-800 antialiased selection:bg-indigo-500 selection:text-white pb-24 font-sans">
       
       {/* Header Navigation with Tab Triggers */}
-      <nav className="max-w-6xl mx-auto px-4 md:px-8 mt-6">
-        <div className="flex flex-col gap-4 p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
-          {/* Brand Row without the redundant button */}
-          <div className="flex items-center justify-start pb-4 border-b border-slate-100">
-            <div className="flex items-center space-x-2.5">
-              <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-xs shrink-0">
-                <span className="text-white font-bold text-xl font-display">G</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-lg md:text-xl tracking-tight text-slate-900 font-display">
-                  Google AI Studio
-                </span>
-              </div>
-            </div>
+      <nav id="app-header-navigation" className="max-w-6xl mx-auto px-4 md:px-8 mt-6">
+        <div className="flex flex-col bg-white border border-slate-250/70 rounded-2xl shadow-sm overflow-hidden">
+          
+          {/* Top Google Branding Colored Accents Bar */}
+          <div className="h-[4px] w-full flex shrink-0">
+            <div className="h-full bg-[#4285F5] flex-1"></div>
+            <div className="h-full bg-[#EA4335] flex-1"></div>
+            <div className="h-full bg-[#FBBC05] flex-1"></div>
+            <div className="h-full bg-[#34A853] flex-1"></div>
           </div>
 
-          {/* Navigation Tab Selection (100% unified in a single row with modern scroll fallback) */}
-          <div className="flex flex-row flex-nowrap items-center md:justify-center gap-1 md:gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200/60 font-sans w-full overflow-x-auto scrollbar-none">
-            <button
-              onClick={() => setActiveTab('overview')}
-              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'overview' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
-            >
-              <Home className="w-3.5 h-3.5 shrink-0" />
-              <span>Início</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('console')}
-              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'console' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
-            >
-              <Compass className="w-3.5 h-3.5 shrink-0" />
-              <span>Descodificador da Consola</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('models')}
-              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'models' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
-            >
-              <Sliders className="w-3.5 h-3.5 shrink-0" />
-              <span>Modelos & Chaves API</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('playground')}
-              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
-            >
-              <Lightbulb className="w-3.5 h-3.5 shrink-0" />
-              <span>Banco de Prompts</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('publishing')}
-              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'publishing' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
-            >
-              <Globe className="w-3.5 h-3.5 shrink-0" />
-              <span>Como Publicar</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('tutorials')}
-              className={`flex items-center gap-1.5 py-2 px-3 lg:px-4 rounded-lg text-[11px] lg:text-xs font-bold transition-all uppercase tracking-wider shrink-0 justify-center cursor-pointer ${activeTab === 'tutorials' ? 'bg-white text-blue-600 shadow-xs border border-slate-200' : 'text-slate-500 hover:text-slate-850 hover:bg-white/40'}`}
-            >
-              <BookOpen className="w-3.5 h-3.5 shrink-0" />
-              <span>Tutoriais & Prática</span>
-            </button>
+          <div className="flex flex-col p-4 md:p-6 gap-4">
+            {/* Beautiful, High-Polished Brand Row */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-slate-950 rounded-xl flex items-center justify-center shadow-xs shrink-0 select-none border border-slate-800">
+                  <span className="text-white font-black text-2xl font-mono tracking-tighter">G</span>
+                </div>
+                <div>
+                  <span className="font-extrabold text-lg md:text-xl tracking-tight text-slate-900 font-display block">
+                    Google AI Studio
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation Tab Selection (Compact text size, single row, beautifully spaced) */}
+            <div className="flex flex-row flex-nowrap items-center md:justify-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/60 font-sans w-full overflow-x-auto scrollbar-none">
+              <button
+                id="tab-btn-overview"
+                onClick={() => setActiveTab('overview')}
+                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'overview' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+              >
+                <Home className="w-3.5 h-3.5 shrink-0" />
+                <span>Início</span>
+              </button>
+              <button
+                id="tab-btn-console"
+                onClick={() => setActiveTab('console')}
+                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'console' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+              >
+                <Compass className="w-3.5 h-3.5 shrink-0" />
+                <span>Descodificador</span>
+              </button>
+              <button
+                id="tab-btn-models"
+                onClick={() => setActiveTab('models')}
+                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'models' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+              >
+                <Sliders className="w-3.5 h-3.5 shrink-0" />
+                <span>Modelos & Chaves</span>
+              </button>
+              <button
+                id="tab-btn-playground"
+                onClick={() => setActiveTab('playground')}
+                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'playground' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+              >
+                <Lightbulb className="w-3.5 h-3.5 shrink-0" />
+                <span>Banco de Prompts</span>
+              </button>
+              <button
+                id="tab-btn-publishing"
+                onClick={() => setActiveTab('publishing')}
+                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'publishing' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+              >
+                <Globe className="w-3.5 h-3.5 shrink-0" />
+                <span>Como Publicar</span>
+              </button>
+              <button
+                id="tab-btn-tutorials"
+                onClick={() => setActiveTab('tutorials')}
+                className={`flex items-center gap-1 py-1.5 px-2 md:px-2.5 lg:px-3 rounded-lg text-[9px] min-[395px]:text-[10px] md:text-[10.5px] lg:text-xs font-bold transition-all uppercase tracking-wide shrink-0 justify-center cursor-pointer ${activeTab === 'tutorials' ? 'bg-white text-blue-600 shadow-3xs border border-slate-200' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
+              >
+                <BookOpen className="w-3.5 h-3.5 shrink-0" />
+                <span>Tutoriais & Prática</span>
+              </button>
+            </div>
           </div>
         </div>
       </nav>
